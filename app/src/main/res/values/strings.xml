@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Smart Teaching System</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="login_here">Login Here</string>
+    <string name="login_now">Login Now</string>
+    <string name="sign_up">Create Account</string>
+    <string name="sign_here">Register Here</string>
+    <string name="or">OR</string>
+    <string name="google">Log In with Google</string>
+    <string name="register_ask">Create Account with email and password</string>
+    <string name="login_ask">Already have an account? Login</string>
+    <string name="register_as">As a</string>
+    <string name="register">Register</string>
+    <string name="update">Update</string>
+    <string name="teacher">Teacher</string>
+    <string name="student">Student</string>
+    <string name="student_register">Student Register</string>
+    <string name="teacher_register">Teacher Register</string>
+    <string name="pick_image">* Pick a image</string>
+    <string name="enter_name">* Enter your name</string>
+    <string name="enter_id">* Enter student ID</string>
+    <string name="enter_employee_id">* Enter employee ID</string>
+    <string name="enter_email">* Enter university email</string>
+    <string name="enter_phone">* Enter mobile number</string>
+    <string name="enter_office">* Enter office room</string>
+    <string name="enter_section">* Enter your section</string>
+    <string name="enter_comment">* Enter your Comments</string>
+    <string name="dept">* Dept</string>
+    <string name="designation">*Designation</string>
+    <string name="counseling"> Counseling List</string>
+    <string name="edit_profile"> Edit Profile</string>
+    <string name="teacher_list"> Teacher List</string>
+    <string name="upload_counseling"> Update counseling schedule</string>
+    <string name="reason"> Reason for counseling</string>
+    <string name="comments"> Comments</string>
+    <string name="approve"> Approve</string>
+    <string name="decline"> Decline</string>
+    <string name="counseling_time"> Counseling Time</string>
+    <string name="counseling_schedule"> Saturday- 2.30pm - 4.00pm, Monday- 4.00pm- 5.30pm, Saturday- 2.30pm - 4.00pm
+    </string>
+    <string name="counseling_reason"> Dear sir, I want to meet with you about my final year project. Because I faced a lot of problem</string>
+    <string name="topics"> Write about your counseling topics</string>
+    <string name="enter_topics">* Write here</string>
+    <string name="make_appointment">Make Appointment</string>
+
+    <string-array name="department">
+
+        <item>CSE</item>
+        <item>EEE</item>
+        <item>BBA</item>
+        <item>SWE</item>
+        <item>English</item>
+        <item>LAW</item>
+        <item> PHARMACY</item>
+        <item>NFE</item>
+
+
+    </string-array>
+
+    <string-array name="designation">
+
+        <item>Lecturer</item>
+        <item>Professor</item>
+        <item>Assistant Professor</item>
+        <item>Head and Professor</item>
+        <item>Dean and Professor</item>
+    </string-array>
+
+
+</resources>

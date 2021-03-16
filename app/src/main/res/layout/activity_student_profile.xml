@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.ui.studentProfile.StudentProfile">
+
+    <RelativeLayout
+        android:id="@+id/topToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/student_profile_toolbar">
+
+        </include>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_below="@id/topToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_margin="8dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/details"
+                android:padding="5dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@drawable/ic_email"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp">
+
+                    </ImageView>
+                    <TextView
+                        android:layout_marginStart="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/studentProfileEmailId"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:text="khairul15-9838@diu.edu.bd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@drawable/ic_department"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp">
+
+                    </ImageView>
+                    <TextView
+                        android:id="@+id/studentProfileDeptId"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="18sp"
+                        android:text="CSE | Section: C"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@drawable/ic_phone"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp">
+
+                    </ImageView>
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/studentProfileMobileId"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:text="01515267153"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <TextView
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="20sp"
+                    android:text="@string/counseling"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+            </LinearLayout>
+
+            <!--
+            <androidx.recyclerview.widget.RecyclerView
+                android:padding="5dp"
+                android:id="@+id/studentRecycleViewId"
+                android:layout_below="@id/details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+             -->
+
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:src="@drawable/ic_insert"
+        android:id="@+id/studentInsertId"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20sp"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+
+
+</RelativeLayout>
