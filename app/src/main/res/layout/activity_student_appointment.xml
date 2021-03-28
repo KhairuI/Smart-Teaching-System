@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.view.StudentAppointment">
+    tools:context=".view.ui.studentAppointment.StudentAppointment">
 
     <RelativeLayout
         android:id="@+id/topToolbar"
@@ -23,7 +23,6 @@
 
         <RelativeLayout
             android:layout_margin="8dp"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -33,6 +32,30 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@drawable/ic_initial"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp">
+
+                    </ImageView>
+                    <TextView
+                        android:layout_marginStart="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/studentAppointmentInitialId"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:text="Tracher Initial: MR"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -241,9 +264,13 @@
 
             </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/studentAppointmentProgressId"
+                android:layout_centerInParent="true"
+                android:layout_width="60dp"
+                android:layout_height="60dp">
 
-
-
+            </ProgressBar>
 
         </RelativeLayout>
 

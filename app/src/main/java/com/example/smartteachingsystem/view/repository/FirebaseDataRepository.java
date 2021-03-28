@@ -4,7 +4,11 @@ import android.graphics.Bitmap;
 
 import com.example.smartteachingsystem.view.dataSource.FirebaseDataSource;
 import com.example.smartteachingsystem.view.model.Student;
+import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.model.Teacher;
+import com.example.smartteachingsystem.view.model.TeacherApp;
+import com.example.smartteachingsystem.view.model.Teacher_List;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import javax.inject.Inject;
@@ -40,6 +44,34 @@ public class FirebaseDataRepository {
     // retrieve student profile data
     public Flowable<DocumentSnapshot> getStudentInfo(){
         return firebaseDataSource.getStudentInfo();
+    }
+
+    // **** Retrieve teacher list here.
+
+    public Flowable<FirestoreRecyclerOptions<Teacher_List>> getTeacher(){
+        return firebaseDataSource.getTeacher();
+    }
+
+    public FirestoreRecyclerOptions<Teacher_List> getTeacherList(){
+         return firebaseDataSource.getAllTeacher();
+    }
+
+    // get student Appointment.......
+
+    public FirestoreRecyclerOptions<TeacherApp> getAllStudentAppointment(){
+        return firebaseDataSource.getAllStudentAppointment();
+    }
+
+    // get teacher appointment....
+    public FirestoreRecyclerOptions<StudentApp> getAllTeacherAppointment(){
+        return firebaseDataSource.getAllTeacherAppointment();
+    }
+
+
+    // save appointment when student request for appointment.
+    // Appointment save in both teacher & student directory..
+    public Completable setStudentAppointment(TeacherApp teacherApp){
+         return firebaseDataSource.setStudentAppointment(teacherApp);
     }
 
 }

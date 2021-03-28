@@ -9,8 +9,8 @@ import android.os.Bundle;
 import com.example.smartteachingsystem.view.repository.AuthRepository;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
 import com.example.smartteachingsystem.view.ui.register.RegisterActivity;
-import com.example.smartteachingsystem.view.ui.studentProfile.StudentProfile;
-import com.example.smartteachingsystem.view.ui.teacherProfile.TeacherProfile;
+import com.example.smartteachingsystem.view.ui.studentHome.StudentHome;
+import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHome;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 
 import javax.inject.Inject;
@@ -33,7 +33,7 @@ public class SplashActivity extends DaggerAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         splashViewModel= new ViewModelProvider(getViewModelStore(),modelProviderFactory).get(SplashViewModel.class);
-        splashViewModel.getUserRole(authRepository.getCurrentUid());
+        splashViewModel.getUserRole();
 
         if(authRepository.getCurrentUser() != null){
             observeRole();
@@ -66,12 +66,12 @@ public class SplashActivity extends DaggerAppCompatActivity {
     }
 
     private void goToStudentActivity() {
-        startActivity(new Intent(this, StudentProfile.class));
+        startActivity(new Intent(this, StudentHome.class));
         finish();
     }
 
     private void goToTeacherActivity() {
-        startActivity(new Intent(this, TeacherProfile.class));
+        startActivity(new Intent(this, TeacherHome.class));
         finish();
     }
 

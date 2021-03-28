@@ -114,11 +114,11 @@ public class FirebaseAuthSource {
 
     // get user role here
 
-    public Flowable<DocumentSnapshot> getUserRole(final String uid){
+    public Flowable<DocumentSnapshot> getUserRole(){
         return Flowable.create(new FlowableOnSubscribe<DocumentSnapshot>() {
             @Override
             public void subscribe(@NonNull FlowableEmitter<DocumentSnapshot> emitter) throws Throwable {
-                DocumentReference reference= fireStore.collection(Nodes.USERS_ROLE).document(uid);
+                DocumentReference reference= fireStore.collection(Nodes.USERS_ROLE).document(firebaseAuth.getCurrentUser().getUid());
                 final ListenerRegistration registration= reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException e) {
@@ -201,6 +201,11 @@ public class FirebaseAuthSource {
                 });
             }
         });
+    }
+
+    //logout
+    public void logout(){
+        firebaseAuth.signOut();
     }
 
 }

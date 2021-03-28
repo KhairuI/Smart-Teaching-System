@@ -1,10 +1,10 @@
-package com.example.smartteachingsystem.view.ui.studentProfile;
+package com.example.smartteachingsystem.view.ui.studentHome;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -14,31 +14,34 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
+import com.example.smartteachingsystem.view.adapter.StudentAppointmentAdapter;
 import com.example.smartteachingsystem.view.model.Student;
-import com.example.smartteachingsystem.view.ui.login.LoginViewModel;
-import com.example.smartteachingsystem.view.view.StudentAppointment;
-import com.example.smartteachingsystem.view.view.StudentEditProfile;
-import com.example.smartteachingsystem.view.view.TeacherList;
+import com.example.smartteachingsystem.view.ui.login.LoginActivity;
+import com.example.smartteachingsystem.view.ui.profileStudent.ProfileStudent;
+import com.example.smartteachingsystem.view.ui.teacherList.TeacherList;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class StudentProfile extends DaggerAppCompatActivity implements View.OnClickListener {
+public class StudentHome extends DaggerAppCompatActivity implements View.OnClickListener,StudentAppointmentAdapter.OnItemClickListener {
     // declare all views...
     private CircleImageView profileImage;
-    private TextView profileName, studentId,studentEmail,studentDept,studentPhone;
+    private TextView profileName, studentId;
     private FloatingActionButton button;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
-    private StudentProfileViewModel studentProfileViewModel;
+
+    private Student newStudent;
+    private StudentHomeViewModel studentHomeViewModel;
 
 
     // Dependency Injection
@@ -49,26 +52,38 @@ public class StudentProfile extends DaggerAppCompatActivity implements View.OnCl
     @Inject
     RequestManager requestManager;
 
+    @Inject
+    StudentAppointmentAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_profile);
+        setContentView(R.layout.activity_student_home);
         findSection();
-        studentProfileViewModel= new ViewModelProvider(getViewModelStore(),providerFactory).get(StudentProfileViewModel.class);
-        studentProfileViewModel.getStudentInfo();
+        studentHomeViewModel = new ViewModelProvider(getViewModelStore(),providerFactory).get(StudentHomeViewModel.class);
+        studentHomeViewModel.getStudentInfo();
         observeStudentInfo();
+        setRecycleView();
+    }
+
+    private void setRecycleView() {
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(this);
+        adapter.startListening();
+
     }
 
     private void observeStudentInfo() {
-        studentProfileViewModel.observeStudentInfo().observe(this, new Observer<Student>() {
+        studentHomeViewModel.observeStudentInfo().observe(this, new Observer<Student>() {
             @Override
             public void onChanged(Student student) {
+                newStudent= student;
                 requestManager.load(student.getImage()).into(profileImage);
                 profileName.setText(student.getName());
                 studentId.setText(student.getId());
-                studentEmail.setText(student.getEmail());
-                studentDept.setText(student.getDepartment()+"|"+"Section: "+student.getSection());
-                studentPhone.setText(student.getPhone());
             }
         });
     }
@@ -79,9 +94,7 @@ public class StudentProfile extends DaggerAppCompatActivity implements View.OnCl
         profileImage= findViewById(R.id.studentProfileImageId);
         profileName= findViewById(R.id.studentProfileNameId);
         studentId= findViewById(R.id.studentProfileUniversityId);
-        studentEmail= findViewById(R.id.studentProfileEmailId);
-        studentDept= findViewById(R.id.studentProfileDeptId);
-        studentPhone= findViewById(R.id.studentProfileMobileId);
+        recyclerView= findViewById(R.id.studentRecycleViewId);
         button= findViewById(R.id.studentInsertId);
         button.setOnClickListener(this);
 
@@ -98,27 +111,58 @@ public class StudentProfile extends DaggerAppCompatActivity implements View.OnCl
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if(item.getItemId()==R.id.editId){
-            Intent intent= new Intent(StudentProfile.this, StudentEditProfile.class);
+            Intent intent= new Intent(StudentHome.this, ProfileStudent.class);
+            intent.putExtra("student",newStudent);
             startActivity(intent);
 
         }
         else if(item.getItemId()==R.id.logoutId){
-            Toast.makeText(StudentProfile.this,"Logout",Toast.LENGTH_SHORT).show();
+            studentHomeViewModel.logout();
+            goToLoginActivity();
 
         }
         else if(item.getItemId()==R.id.aboutId){
-            Intent intent= new Intent(StudentProfile.this, StudentAppointment.class);
-            startActivity(intent);
+          showSnackBar("About");
 
         }
         return super.onOptionsItemSelected(item);
     }
+    private void showSnackBar(String message) {
+        View contextView = findViewById(android.R.id.content);
+        Snackbar.make(contextView, message, Snackbar.LENGTH_LONG).show();
+    }
+
 
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.studentInsertId){
-            Intent intent= new Intent(StudentProfile.this, TeacherList.class);
+            Intent intent= new Intent(StudentHome.this, TeacherList.class);
             startActivity(intent);
         }
     }
+    private void goToLoginActivity() {
+        Intent intent = new Intent(StudentHome.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+        String name= documentSnapshot.getString("name");
+        showSnackBar(name);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
 }

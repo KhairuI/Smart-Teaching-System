@@ -43,12 +43,17 @@ public class AuthRepository {
     }
 
     // check user Role in splash ....
-    public Flowable<DocumentSnapshot> getUserRole(String uId){
-        return firebaseAuthSource.getUserRole(uId);
+    public Flowable<DocumentSnapshot> getUserRole(){
+        return firebaseAuthSource.getUserRole();
     }
 
     // Create new user/ Registration with email & password....
     public Completable register(String email, String password){
         return firebaseAuthSource.register(email,password);
+    }
+
+    //logout...
+    public void logOut(){
+        firebaseAuthSource.logout();
     }
 }

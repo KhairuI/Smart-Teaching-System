@@ -16,33 +16,39 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartTeachingSystem">
-        <activity android:name=".view.view.StudentAppointment" />
+        <activity
+            android:parentActivityName=".view.ui.studentHome.StudentHome"
+            android:name=".view.ui.profileStudent.ProfileStudent">
+
+        </activity>
+        <activity
+            android:name=".view.ui.studentAppointment.StudentAppointment"
+            android:parentActivityName=".view.ui.teacherList.TeacherList" />
         <activity android:name=".view.view.TeacherEditProfile" />
         <activity android:name=".view.view.TeacherAppointment" />
-        <activity android:name=".view.ui.teacherProfile.TeacherProfile" />
-        <activity android:name=".view.view.TeacherList" />
+        <activity android:name=".view.ui.teacherHome.TeacherHome" />
+        <activity
+            android:name=".view.ui.teacherList.TeacherList"
+            android:parentActivityName=".view.ui.studentHome.StudentHome" />
         <activity android:name=".view.view.StudentEditProfile" />
-        <activity android:name=".view.ui.studentProfile.StudentProfile" />
+        <activity android:name=".view.ui.studentHome.StudentHome" />
         <activity android:name=".view.ui.teacherRegister.TeacherRegister" />
         <activity android:name=".view.ui.studentRegister.StudentRegister" />
         <activity android:name=".view.ui.register.RegisterActivity" />
         <activity android:name=".view.ui.account.AccountActivity" />
         <activity
             android:name=".view.ui.splash.SplashActivity"
-            android:theme="@style/AppLauncher" >
-
-        </activity>
-        <activity android:name=".view.ui.login.LoginActivity">
-
+            android:theme="@style/AppLauncher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity android:name=".view.ui.login.LoginActivity"></activity>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

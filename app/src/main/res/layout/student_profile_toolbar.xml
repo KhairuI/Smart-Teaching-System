@@ -31,6 +31,8 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:text="Khairul Islam"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:id="@+id/studentProfileNameId"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -41,6 +43,8 @@
 
                     <TextView
                         android:text="172-15-9838"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:layout_below="@id/studentProfileNameId"
                         android:id="@+id/studentProfileUniversityId"
                         android:textColor="@color/white"

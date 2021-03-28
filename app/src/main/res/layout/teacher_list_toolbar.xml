@@ -3,11 +3,12 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:theme="@style/Theme.MaterialComponents.Light"
         android:background="@color/my_toolbar">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:id="@+id/teacherListToolbarId">
 
             <RelativeLayout
@@ -17,6 +18,9 @@
                 <TextView
                     android:text="@string/teacher_list"
                     android:textSize="23sp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:layout_centerVertical="true"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">

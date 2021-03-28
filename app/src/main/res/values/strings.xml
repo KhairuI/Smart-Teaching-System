@@ -25,6 +25,7 @@
     <string name="enter_email">* Enter university email</string>
     <string name="enter_phone">* Enter mobile number</string>
     <string name="enter_office">* Enter office room</string>
+    <string name="enter_initial">* Enter teacher initial</string>
     <string name="enter_section">* Enter your section</string>
     <string name="enter_comment">* Enter your Comments</string>
     <string name="dept">* Dept</string>
@@ -41,7 +42,7 @@
     <string name="counseling_schedule"> Saturday- 2.30pm - 4.00pm, Monday- 4.00pm- 5.30pm, Saturday- 2.30pm - 4.00pm
     </string>
     <string name="counseling_reason"> Dear sir, I want to meet with you about my final year project. Because I faced a lot of problem</string>
-    <string name="topics"> Write about your counseling topics</string>
+    <string name="topics">Counseling topics</string>
     <string name="enter_topics">* Write here</string>
     <string name="make_appointment">Make Appointment</string>
 

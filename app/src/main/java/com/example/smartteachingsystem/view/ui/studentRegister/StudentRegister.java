@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.model.Student;
-import com.example.smartteachingsystem.view.ui.studentProfile.StudentProfile;
+import com.example.smartteachingsystem.view.ui.studentHome.StudentHome;
 import com.example.smartteachingsystem.view.utils.DataConverter;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
@@ -105,7 +105,7 @@ public class StudentRegister extends DaggerAppCompatActivity implements View.OnC
     }
 
     private void goToStudentProfile() {
-        Intent intent = new Intent(StudentRegister.this, StudentProfile.class);
+        Intent intent = new Intent(StudentRegister.this, StudentHome.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

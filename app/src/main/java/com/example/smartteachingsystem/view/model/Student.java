@@ -1,6 +1,14 @@
 package com.example.smartteachingsystem.view.model;
 
-public class Student {
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import java.io.Serializable;
+
+public class Student implements Serializable {
+
+    //  retrieve student profile data ......
+
     private String name;
     private String id;
     private String email;

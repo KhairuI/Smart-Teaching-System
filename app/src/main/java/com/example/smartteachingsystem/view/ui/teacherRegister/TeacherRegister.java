@@ -29,7 +29,7 @@ import com.example.smartteachingsystem.view.model.Teacher;
 import com.example.smartteachingsystem.view.utils.DataConverter;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
-import com.example.smartteachingsystem.view.ui.teacherProfile.TeacherProfile;
+import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHome;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -45,15 +45,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.functions.Function4;
-import io.reactivex.rxjava3.functions.Function5;
+import io.reactivex.rxjava3.functions.Function6;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 
 public class TeacherRegister extends DaggerAppCompatActivity implements View.OnClickListener {
 
     // Declare all view..
     private CircleImageView teacherImage;
-    private TextInputEditText teacherName,teacherId,teacherEmail,teacherMobile,teacherOffice;
+    private TextInputEditText teacherName,teacherId,teacherEmail,teacherMobile,teacherOffice,teacherInitial;
     private Spinner deptSpinner,designationSpinner;
     private TextView teacherDept,teacherDesignation;
     private Button teacherRegisterButton;
@@ -109,7 +108,7 @@ public class TeacherRegister extends DaggerAppCompatActivity implements View.OnC
     }
 
     private void goToTeacherProfile() {
-        Intent intent = new Intent(TeacherRegister.this, TeacherProfile.class);
+        Intent intent = new Intent(TeacherRegister.this, TeacherHome.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
@@ -121,11 +120,12 @@ public class TeacherRegister extends DaggerAppCompatActivity implements View.OnC
         Observable<String> email_observable = RxBindingHelper.getObservableFrom(teacherEmail);
         Observable<String> phone_observable = RxBindingHelper.getObservableFrom(teacherMobile);
         Observable<String> office_observable = RxBindingHelper.getObservableFrom(teacherOffice);
+        Observable<String> initial_observable = RxBindingHelper.getObservableFrom(teacherInitial);
 
-       formObservable= Observable.combineLatest(name_observable, id_observable, email_observable, phone_observable,office_observable, new Function5<String, String, String,String, String, Boolean>() {
+       formObservable= Observable.combineLatest(name_observable, id_observable, email_observable, phone_observable, office_observable, initial_observable, new Function6<String, String, String, String, String, String, Boolean>() {
            @Override
-           public Boolean apply(String name, String id, String email, String phone,String office) throws Throwable {
-               return isValidForm(name, id, email, phone,office);
+           public Boolean apply(String name, String id, String email, String phone, String office, String initial) throws Throwable {
+               return isValidForm(name,id,email,phone,office,initial);
            }
        });
 
@@ -147,7 +147,7 @@ public class TeacherRegister extends DaggerAppCompatActivity implements View.OnC
        });
     }
 
-    private Boolean isValidForm(String name, String id, String email, String phone,String office) {
+    private Boolean isValidForm(String name, String id, String email, String phone,String office,String initial) {
         boolean isName = !name.isEmpty();
         if(!isName){
             teacherName.setError("Please enter name");
@@ -171,8 +171,12 @@ public class TeacherRegister extends DaggerAppCompatActivity implements View.OnC
         if (!isOffice) {
             teacherOffice.setError("Please enter office room");
         }
+        boolean isInitial = !initial.isEmpty();
+        if (!isInitial) {
+            teacherInitial.setError("Please enter office room");
+        }
 
-        return isName && isId && isEmail && isPhone && isOffice;
+        return isName && isId && isEmail && isPhone && isOffice && isInitial;
     }
 
 
@@ -229,6 +233,7 @@ public class TeacherRegister extends DaggerAppCompatActivity implements View.OnC
         teacherDept= findViewById(R.id.teacherDeptId);
         teacherDesignation= findViewById(R.id.teacherDesignationId);
         teacherOffice= findViewById(R.id.teacherOfficeId);
+        teacherInitial= findViewById(R.id.teacherInitialId);
         teacherRegisterButton= findViewById(R.id.teacherRegisterButtonId);
         teacherRegisterButton.setOnClickListener(this);
         teacherProgress= findViewById(R.id.teacherProgressId);
@@ -262,7 +267,8 @@ public class TeacherRegister extends DaggerAppCompatActivity implements View.OnC
         String designation= teacherDesignation.getText().toString();
         String department= teacherDept.getText().toString();
         String office= teacherOffice.getText().toString();
-        Teacher teacher= new Teacher(name,id,email,mobile,department,designation,"image",office,"Not upload yet");
+        String initial= teacherInitial.getText().toString();
+        Teacher teacher= new Teacher(name,id,email,mobile,department,designation,"image",office,"Not upload yet",initial);
         teacherRegisterViewModel.setTeacherData(teacher,bitmap);
 
     }

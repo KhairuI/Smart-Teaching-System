@@ -32,8 +32,8 @@ public class SplashViewModel extends ViewModel {
     }
 
 
-    public void getUserRole(String uId){
-        authRepository.getUserRole(uId)
+    public void getUserRole(){
+        authRepository.getUserRole()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).toObservable().subscribe(new Observer<DocumentSnapshot>() {
             @Override

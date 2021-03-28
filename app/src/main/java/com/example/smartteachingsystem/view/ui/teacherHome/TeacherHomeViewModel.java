@@ -1,4 +1,4 @@
-package com.example.smartteachingsystem.view.ui.studentProfile;
+package com.example.smartteachingsystem.view.ui.teacherHome;
 
 import android.util.Log;
 
@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.smartteachingsystem.view.model.Student;
 import com.example.smartteachingsystem.view.model.Teacher;
+import com.example.smartteachingsystem.view.repository.AuthRepository;
 import com.example.smartteachingsystem.view.repository.FirebaseDataRepository;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -20,22 +20,23 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class StudentProfileViewModel extends ViewModel {
-    private static final String TAG="StudentProfileViewModel";
+public class TeacherHomeViewModel extends ViewModel {
+    private static final String TAG = "TeacherProfileViewModel";
     private FirebaseDataRepository firebaseDataRepository;
+    private AuthRepository authRepository;
 
-    private MediatorLiveData<Student> onStudentProfileInfo = new MediatorLiveData<>();
+    private MediatorLiveData<Teacher> onTeacherProfileInfo = new MediatorLiveData<>();
     private CompositeDisposable disposable = new CompositeDisposable();
 
     @Inject
-    public StudentProfileViewModel( FirebaseDataRepository firebaseDataRepository) {
-        Log.d(TAG, "StudentProfileViewModel: is working...");
-
+    public TeacherHomeViewModel(FirebaseDataRepository firebaseDataRepository, AuthRepository authRepository) {
+        Log.d(TAG, "TeacherProfileViewModel: is working.....");
         this.firebaseDataRepository= firebaseDataRepository;
+        this.authRepository= authRepository;
     }
 
-    public void getStudentInfo(){
-        firebaseDataRepository.getStudentInfo().subscribeOn(Schedulers.io())
+    public void getTeacherInfo(){
+        firebaseDataRepository.getTeacherInfo().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).toObservable().subscribe(new Observer<DocumentSnapshot>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
@@ -44,8 +45,8 @@ public class StudentProfileViewModel extends ViewModel {
 
             @Override
             public void onNext(@NonNull DocumentSnapshot documentSnapshot) {
-                Student student= documentSnapshot.toObject(Student.class);
-                onStudentProfileInfo.setValue(student);
+                Teacher teacher= documentSnapshot.toObject(Teacher.class);
+                onTeacherProfileInfo.setValue(teacher);
             }
 
             @Override
@@ -60,12 +61,18 @@ public class StudentProfileViewModel extends ViewModel {
         });
     }
 
-    public LiveData<Student> observeStudentInfo(){
-        return onStudentProfileInfo;
+    public LiveData<Teacher> observeTeacherInfo(){
+        return onTeacherProfileInfo;
+    }
+
+    // logout
+    public void logout(){
+      authRepository.logOut();
     }
     @Override
     protected void onCleared() {
         super.onCleared();
         disposable.clear();
     }
+
 }

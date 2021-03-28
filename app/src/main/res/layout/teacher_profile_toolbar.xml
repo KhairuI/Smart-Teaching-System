@@ -31,6 +31,8 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:text="Dr. Touhid Bhuiyan"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:id="@+id/teacherProfileNameId"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -41,6 +43,8 @@
 
                     <TextView
                         android:text="710005432"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:layout_below="@id/teacherProfileNameId"
                         android:id="@+id/teacherProfileUniversityId"
                         android:textColor="@color/white"

@@ -18,8 +18,8 @@ import com.example.smartteachingsystem.view.ui.register.RegisterActivity;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.ui.account.AccountActivity;
-import com.example.smartteachingsystem.view.ui.studentProfile.StudentProfile;
-import com.example.smartteachingsystem.view.ui.teacherProfile.TeacherProfile;
+import com.example.smartteachingsystem.view.ui.studentHome.StudentHome;
+import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHome;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -109,14 +109,14 @@ public class LoginActivity extends DaggerAppCompatActivity implements View.OnCli
     }
 
     private void goToTeacherActivity() {
-        Intent intent = new Intent(LoginActivity.this, TeacherProfile.class);
+        Intent intent = new Intent(LoginActivity.this, TeacherHome.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
 
     private void goToStudentActivity() {
-        Intent intent = new Intent(LoginActivity.this, StudentProfile.class);
+        Intent intent = new Intent(LoginActivity.this, StudentHome.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

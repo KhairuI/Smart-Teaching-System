@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.view.TeacherList">
+    tools:context=".view.ui.teacherList.TeacherList">
 
     <RelativeLayout
         android:id="@+id/topToolbar"
@@ -17,14 +17,15 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_margin="5dp"
+        android:layout_margin="3dp"
         android:layout_below="@id/topToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/teacherListRecycleId"
-            android:padding="5dp"
+            android:padding="1dp"
+            tools:listitem="@layout/single_teacher_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

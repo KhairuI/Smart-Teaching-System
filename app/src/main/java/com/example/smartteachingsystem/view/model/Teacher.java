@@ -1,5 +1,7 @@
 package com.example.smartteachingsystem.view.model;
 
+        // retrieve teacher profile data....
+
 public class Teacher {
     private String name;
     private String id;
@@ -10,11 +12,12 @@ public class Teacher {
     private String image;
     private String office;
     private String counseling;
+    private String initial;
 
     public Teacher() {
     }
 
-    public Teacher(String name, String id, String email, String phone, String department, String designation, String image, String office, String counseling) {
+    public Teacher(String name, String id, String email, String phone, String department, String designation, String image, String office, String counseling, String initial) {
         this.name = name;
         this.id = id;
         this.email = email;
@@ -24,6 +27,7 @@ public class Teacher {
         this.image = image;
         this.office = office;
         this.counseling = counseling;
+        this.initial = initial;
     }
 
     public String getName() {
@@ -96,5 +100,13 @@ public class Teacher {
 
     public void setCounseling(String counseling) {
         this.counseling = counseling;
+    }
+
+    public String getInitial() {
+        return initial;
+    }
+
+    public void setInitial(String initial) {
+        this.initial = initial;
     }
 }

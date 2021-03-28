@@ -13,5 +13,7 @@
     <color name="small_orange">#f4823b</color>
 
     <color name="small_blue">#66a9e0</color>
+    <color name="normal_small_blue">#C8DAE8</color>
     <color name="my_toolbar">#517da2</color>
+    <color name="pending">#E32D1F</color>
 </resources>
