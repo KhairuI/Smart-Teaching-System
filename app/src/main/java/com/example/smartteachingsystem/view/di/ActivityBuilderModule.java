@@ -9,6 +9,7 @@ import com.example.smartteachingsystem.view.di.studentAppointment.StudentAppView
 import com.example.smartteachingsystem.view.di.studentHome.StudentHomeModule;
 import com.example.smartteachingsystem.view.di.studentHome.StudentHomeViewModelModule;
 import com.example.smartteachingsystem.view.di.studentRegister.StudentRegViewModelModule;
+import com.example.smartteachingsystem.view.di.teacherHome.TeacherHomeModule;
 import com.example.smartteachingsystem.view.di.teacherList.TeacherListModule;
 import com.example.smartteachingsystem.view.di.teacherList.TeacherListViewModelModule;
 import com.example.smartteachingsystem.view.di.teacherHome.TeacherHomeViewModelModule;
@@ -92,7 +93,8 @@ public abstract class ActivityBuilderModule {
     // Teacher Home Activity
     @ContributesAndroidInjector(
             modules = {
-                    TeacherHomeViewModelModule.class
+                    TeacherHomeViewModelModule.class,
+                    TeacherHomeModule.class
             }
     )
     abstract TeacherHome contributeTeacherHome();

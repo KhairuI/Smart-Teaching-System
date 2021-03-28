@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/mainLayout"
+        android:padding="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_margin="7dp"
+            android:id="@+id/topId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/singleTeacherAppointmentImageId"
+                android:src="@drawable/profile"
+                android:layout_width="45dp"
+                android:layout_height="45dp">
+
+            </de.hdodenhof.circleimageview.CircleImageView>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_margin="7dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/topId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Khairul Islam"
+                android:id="@+id/singleTeacherAppointmentNameId"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/singleTeacherAppointmentDeptId"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:text="CSE"
+                android:layout_marginStart="5dp"
+                android:id="@+id/singleTeacherAppointmentDeptId"
+                android:textSize="18sp"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:text="172 - 15 - 9838"
+                android:id="@+id/singleTeacherAppointmentUserId"
+                android:textSize="16sp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_below="@id/singleTeacherAppointmentNameId"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:text="Request"
+                android:id="@+id/singleTeacherAppointmentStatusId"
+                android:textSize="16sp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_below="@id/singleTeacherAppointmentUserId"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+
+        </RelativeLayout>
+    </RelativeLayout>
+    <View
+        android:layout_below="@id/mainLayout"
+        android:background="@color/normal_small_blue"
+        android:layout_width="match_parent"
+        android:layout_height="1dp">
+
+    </View>
+
+
+
+</RelativeLayout>

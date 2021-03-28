@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -11,22 +12,26 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
+import com.example.smartteachingsystem.view.adapter.TeacherAppointmentAdapter;
 import com.example.smartteachingsystem.view.model.Teacher;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
 import com.example.smartteachingsystem.view.view.TeacherAppointment;
 import com.example.smartteachingsystem.view.view.TeacherEditProfile;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TeacherHome extends DaggerAppCompatActivity {
+public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppointmentAdapter.OnItemClickListener {
     // declare all views...
     private CircleImageView teacherProfileImage;
     private TextView teacherName, teacherId;
@@ -42,6 +47,9 @@ public class TeacherHome extends DaggerAppCompatActivity {
     @Inject
     RequestManager requestManager;
 
+    @Inject
+    TeacherAppointmentAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,15 @@ public class TeacherHome extends DaggerAppCompatActivity {
         teacherHomeViewModel = new ViewModelProvider(getViewModelStore(),providerFactory).get(TeacherHomeViewModel.class);
         teacherHomeViewModel.getTeacherInfo();
         observeTeacherInfo();
+        setRecycleView();
+    }
+
+    private void setRecycleView() {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(this);
+        adapter.startListening();
     }
 
     private void observeTeacherInfo() {
@@ -110,5 +127,28 @@ public class TeacherHome extends DaggerAppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+        String name= documentSnapshot.getString("name");
+        showSnackBar(name);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+    private void showSnackBar(String message) {
+        View contextView = findViewById(android.R.id.content);
+        Snackbar.make(contextView, message, Snackbar.LENGTH_LONG).show();
     }
 }

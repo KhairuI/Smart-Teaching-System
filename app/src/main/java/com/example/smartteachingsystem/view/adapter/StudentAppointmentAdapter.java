@@ -18,7 +18,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class StudentAppointmentAdapter extends FirestoreRecyclerAdapter<TeacherApp,StudentAppointmentAdapter.TeacherViewHolder> {
+public class StudentAppointmentAdapter extends FirestoreRecyclerAdapter<TeacherApp, StudentAppointmentAdapter.StudentAppointmentViewHolder> {
 
     private OnItemClickListener listener;
     private RequestManager requestManager;
@@ -30,7 +30,7 @@ public class StudentAppointmentAdapter extends FirestoreRecyclerAdapter<TeacherA
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull TeacherViewHolder holder, int position, @NonNull TeacherApp model) {
+    protected void onBindViewHolder(@NonNull StudentAppointmentViewHolder holder, int position, @NonNull TeacherApp model) {
 
         holder.name.setText(model.getName());
         holder.initial.setText(model.getInitial());
@@ -50,19 +50,19 @@ public class StudentAppointmentAdapter extends FirestoreRecyclerAdapter<TeacherA
 
     @NonNull
     @Override
-    public TeacherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public StudentAppointmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.single_student_appointment, parent, false);
-        return new TeacherViewHolder(view);
+        return new StudentAppointmentViewHolder(view);
     }
 
 
-    public class TeacherViewHolder extends RecyclerView.ViewHolder{
+    public class StudentAppointmentViewHolder extends RecyclerView.ViewHolder{
 
         private TextView name, initial, dept,status;
         private CircleImageView image;
 
-        public TeacherViewHolder(@NonNull View itemView) {
+        public StudentAppointmentViewHolder(@NonNull View itemView) {
             super(itemView);
             name= itemView.findViewById(R.id.singleStudentAppointmentNameId);
             initial= itemView.findViewById(R.id.singleStudentAppointmentInitialId);
