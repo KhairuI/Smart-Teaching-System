@@ -3,18 +3,21 @@ package com.example.smartteachingsystem.view.di;
 import com.example.smartteachingsystem.view.di.account.AccountViewModelModule;
 import com.example.smartteachingsystem.view.di.login.LoginViewModelModule;
 import com.example.smartteachingsystem.view.di.profileStudent.ProfileStudentViewModelModule;
+import com.example.smartteachingsystem.view.di.profileTeacher.ProfileTeacherViewModelModule;
 import com.example.smartteachingsystem.view.di.register.RegisterViewModelModule;
 import com.example.smartteachingsystem.view.di.splash.SplashViewModelModule;
 import com.example.smartteachingsystem.view.di.studentAppointment.StudentAppViewModelModule;
 import com.example.smartteachingsystem.view.di.studentHome.StudentHomeModule;
 import com.example.smartteachingsystem.view.di.studentHome.StudentHomeViewModelModule;
 import com.example.smartteachingsystem.view.di.studentRegister.StudentRegViewModelModule;
+import com.example.smartteachingsystem.view.di.teacherAppointment.TeacherAppViewModelModule;
 import com.example.smartteachingsystem.view.di.teacherHome.TeacherHomeModule;
 import com.example.smartteachingsystem.view.di.teacherList.TeacherListModule;
 import com.example.smartteachingsystem.view.di.teacherList.TeacherListViewModelModule;
 import com.example.smartteachingsystem.view.di.teacherHome.TeacherHomeViewModelModule;
 import com.example.smartteachingsystem.view.di.teacherRegister.TeacherRegViewModelModule;
 import com.example.smartteachingsystem.view.ui.profileStudent.ProfileStudent;
+import com.example.smartteachingsystem.view.ui.profileTeacher.ProfileTeacher;
 import com.example.smartteachingsystem.view.ui.splash.SplashActivity;
 import com.example.smartteachingsystem.view.ui.account.AccountActivity;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
@@ -22,6 +25,7 @@ import com.example.smartteachingsystem.view.ui.register.RegisterActivity;
 import com.example.smartteachingsystem.view.ui.studentAppointment.StudentAppointment;
 import com.example.smartteachingsystem.view.ui.studentHome.StudentHome;
 import com.example.smartteachingsystem.view.ui.studentRegister.StudentRegister;
+import com.example.smartteachingsystem.view.ui.teacherAppointment.TeacherAppointment;
 import com.example.smartteachingsystem.view.ui.teacherList.TeacherList;
 import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHome;
 import com.example.smartteachingsystem.view.ui.teacherRegister.TeacherRegister;
@@ -116,6 +120,15 @@ public abstract class ActivityBuilderModule {
     )
     abstract StudentAppointment contributeStudentAppointment();
 
+    // Teacher Appointment Activity
+    @ContributesAndroidInjector(
+            modules = {
+                    TeacherAppViewModelModule.class
+            }
+    )
+    abstract TeacherAppointment contributeTeacherAppointment();
+
+
     // profile Student Activity
 
     @ContributesAndroidInjector(
@@ -124,6 +137,15 @@ public abstract class ActivityBuilderModule {
             }
     )
     abstract ProfileStudent contributeProfileStudent();
+
+    // profile Teacher Activity
+
+    @ContributesAndroidInjector(
+            modules = {
+                    ProfileTeacherViewModelModule.class
+            }
+    )
+    abstract ProfileTeacher contributeProfileTeacher();
 
 
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.view.TeacherAppointment">
+    tools:context=".view.ui.teacherAppointment.TeacherAppointment">
 
     <RelativeLayout
         android:id="@+id/topToolbar"
@@ -33,6 +33,18 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Request"
+                    android:id="@+id/teacherAppointmentStatusId"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </TextView>
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -178,7 +190,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/studentNameId"
+                        android:id="@+id/teacherCommentTextId"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:maxLines="5"
@@ -199,7 +211,7 @@
                         android:layout_margin="5dp"
                         android:text="@string/approve"
                         android:textAllCaps="false"
-                        android:id="@+id/approveButtonId"
+                        android:id="@+id/teacherAppointmentApproveButtonId"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:backgroundTint="@color/small_green"
@@ -212,7 +224,7 @@
 
                     <Button
                         android:layout_margin="5dp"
-                        android:id="@+id/declineButtonId"
+                        android:id="@+id/teacherAppointmentDeclineButtonId"
                         android:text="@string/decline"
                         android:textAllCaps="false"
                         android:textSize="18sp"
@@ -238,5 +250,15 @@
         </RelativeLayout>
 
     </ScrollView>
+
+   <ProgressBar
+
+       android:layout_centerHorizontal="true"
+       android:id="@+id/teacherAppointmentProgressId"
+       android:layout_marginTop="180dp"
+       android:layout_width="60dp"
+       android:layout_height="60dp">
+
+   </ProgressBar>
 
 </RelativeLayout>

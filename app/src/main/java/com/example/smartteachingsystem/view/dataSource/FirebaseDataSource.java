@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+import com.example.smartteachingsystem.view.model.Response;
 import com.example.smartteachingsystem.view.model.Student;
 import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.model.Teacher;
@@ -459,6 +460,47 @@ public class FirebaseDataSource {
                         emitter.onError(e);
                     }
                 });
+            }
+        });
+    }
+
+    // save teacher response. This response save in both teacher & student directory...
+
+    public Completable setTeacherResponse(Response response){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+
+                final DocumentReference teacher_reference= fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid)
+                        .collection("appointment").document(response.getPushKey());
+
+                final DocumentReference student_reference= fireStore.collection(Nodes.STUDENTS_PROFILE).document(response.getuId())
+                        .collection("appointment").document(response.getPushKey());
+
+                teacher_reference.update("message",response.getMessage(),"status",response.getStatus())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                student_reference.update("message",response.getMessage(),"status", response.getStatus())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                emitter.onComplete();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                                        emitter.onError(e);
+                                    }
+                                });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+
             }
         });
     }

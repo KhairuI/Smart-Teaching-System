@@ -77,6 +77,7 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
                             break;
                         case SUCCESS:
                             progressBar.setVisibility(View.INVISIBLE);
+                            showSnackBar("Submit Successfully");
                             //goToStudentProfile();
                             break;
                         case ERROR:

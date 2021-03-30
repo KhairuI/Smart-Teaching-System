@@ -33,7 +33,7 @@
     <string name="counseling"> Counseling List</string>
     <string name="edit_profile"> Edit Profile</string>
     <string name="teacher_list"> Teacher List</string>
-    <string name="upload_counseling"> Update counseling schedule</string>
+    <string name="update_counseling"> Update counseling</string>
     <string name="reason"> Reason for counseling</string>
     <string name="comments"> Comments</string>
     <string name="approve"> Approve</string>

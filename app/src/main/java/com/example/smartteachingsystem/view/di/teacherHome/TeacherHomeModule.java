@@ -21,7 +21,8 @@ public class TeacherHomeModule {
     }
 
     @Provides
-    static TeacherAppointmentAdapter provideTeacherAppointmentAdapter(FirestoreRecyclerOptions<StudentApp> options, RequestManager requestManager){
+    static TeacherAppointmentAdapter provideTeacherAppointmentAdapter(FirestoreRecyclerOptions<StudentApp> options,
+                                                                      RequestManager requestManager){
         return new TeacherAppointmentAdapter(options,requestManager);
     }
 }

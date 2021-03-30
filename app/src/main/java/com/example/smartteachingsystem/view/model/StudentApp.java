@@ -1,6 +1,8 @@
 package com.example.smartteachingsystem.view.model;
 
-public class StudentApp {
+import java.io.Serializable;
+
+public class StudentApp implements Serializable {
     // This class is used for student appointment information in teacher directory........
 
     private String status;

@@ -1,4 +1,4 @@
-package com.example.smartteachingsystem.view.ui.studentAppointment;
+package com.example.smartteachingsystem.view.ui.teacherAppointment;
 
 import android.util.Log;
 
@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.smartteachingsystem.view.model.TeacherApp;
+import com.example.smartteachingsystem.view.model.Response;
 import com.example.smartteachingsystem.view.repository.FirebaseDataRepository;
 import com.example.smartteachingsystem.view.utils.StateResource;
 
@@ -19,44 +19,46 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class StudentAppointmentViewModel extends ViewModel {
-    private static final String TAG = "StudentAppointmentViewM";
+public class TeacherAppointmentViewModel extends ViewModel {
+
     private final FirebaseDataRepository firebaseDataRepository;
-    private final MediatorLiveData<StateResource> studentAppointment = new MediatorLiveData<>();
+    private final MediatorLiveData<StateResource> teacherAppointment = new MediatorLiveData<>();
     private final CompositeDisposable disposable = new CompositeDisposable();
 
+    private static final String TAG="TeacherAppointmentViewM";
+
     @Inject
-    public StudentAppointmentViewModel(FirebaseDataRepository firebaseDataRepository) {
+    public TeacherAppointmentViewModel(FirebaseDataRepository firebaseDataRepository) {
+        Log.d(TAG, "TeacherAppointmentViewModel: is working....");
         this.firebaseDataRepository= firebaseDataRepository;
-        Log.d(TAG, "StudentAppointmentViewModel: is working...");
     }
 
-    // set student Appointment....
+    // set teacher response....
+    public void teacherResponse(Response response){
 
-    public void setStudentAppointment(TeacherApp teacherApp){
-        firebaseDataRepository.setStudentAppointment(teacherApp).subscribeOn(Schedulers.io())
+        firebaseDataRepository.setTeacherResponse(response).subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread()).subscribe(new CompletableObserver() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 disposable.add(d);
-                studentAppointment.setValue(StateResource.loading());
+                teacherAppointment.setValue(StateResource.loading());
             }
 
             @Override
             public void onComplete() {
-                studentAppointment.setValue(StateResource.success());
+                teacherAppointment.setValue(StateResource.success());
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                studentAppointment.setValue(StateResource.error(e.toString()));
+                teacherAppointment.setValue(StateResource.error(e.toString()));
             }
         });
     }
 
-    // Observe student appointment save or not ....
-    public LiveData<StateResource> observeStudentAppointment(){
-        return studentAppointment;
+    // Observe teacher response save or not ....
+    public LiveData<StateResource> observeTeacherResponse(){
+        return teacherAppointment;
     }
 
     @Override

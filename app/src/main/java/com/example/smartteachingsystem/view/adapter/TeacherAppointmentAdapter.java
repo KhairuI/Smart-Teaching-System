@@ -12,19 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.model.StudentApp;
+import com.example.smartteachingsystem.view.repository.FirebaseDataRepository;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import javax.inject.Inject;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class TeacherAppointmentAdapter extends FirestoreRecyclerAdapter<StudentApp, TeacherAppointmentAdapter.TeacherAppointmentViewHolder> {
 
     private OnItemClickListener listener;
     private RequestManager requestManager;
+   // private CompositeDisposable disposable = new CompositeDisposable();
+    //private FirebaseDataRepository firebaseDataRepository;
 
-    public TeacherAppointmentAdapter(@NonNull FirestoreRecyclerOptions<StudentApp> options,RequestManager requestManager) {
+    @Inject
+    public TeacherAppointmentAdapter(@NonNull FirestoreRecyclerOptions<StudentApp> options,
+                                    RequestManager requestManager) {
         super(options);
+       //this.firebaseDataRepository= firebaseDataRepository;
         this.requestManager= requestManager;
     }
 

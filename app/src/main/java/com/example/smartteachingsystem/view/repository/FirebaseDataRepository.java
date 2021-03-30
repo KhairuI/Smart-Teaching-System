@@ -3,6 +3,7 @@ package com.example.smartteachingsystem.view.repository;
 import android.graphics.Bitmap;
 
 import com.example.smartteachingsystem.view.dataSource.FirebaseDataSource;
+import com.example.smartteachingsystem.view.model.Response;
 import com.example.smartteachingsystem.view.model.Student;
 import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.model.Teacher;
@@ -72,6 +73,11 @@ public class FirebaseDataRepository {
     // Appointment save in both teacher & student directory..
     public Completable setStudentAppointment(TeacherApp teacherApp){
          return firebaseDataSource.setStudentAppointment(teacherApp);
+    }
+
+    // save teacher response. This response save in both teacher & student directory...
+    public Completable setTeacherResponse(Response response){
+         return firebaseDataSource.setTeacherResponse(response);
     }
 
 }

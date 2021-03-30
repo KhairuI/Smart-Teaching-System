@@ -16,16 +16,19 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartTeachingSystem">
-        <activity
-            android:parentActivityName=".view.ui.studentHome.StudentHome"
-            android:name=".view.ui.profileStudent.ProfileStudent">
+        <activity android:name=".view.ui.profileTeacher.ProfileTeacher"
+            android:parentActivityName=".view.ui.teacherHome.TeacherHome"/>
 
-        </activity>
+        <activity
+            android:name=".view.ui.profileStudent.ProfileStudent"
+            android:parentActivityName=".view.ui.studentHome.StudentHome" />
         <activity
             android:name=".view.ui.studentAppointment.StudentAppointment"
             android:parentActivityName=".view.ui.teacherList.TeacherList" />
         <activity android:name=".view.view.TeacherEditProfile" />
-        <activity android:name=".view.view.TeacherAppointment" />
+        <activity android:name=".view.ui.teacherAppointment.TeacherAppointment"
+            android:parentActivityName=".view.ui.teacherHome.TeacherHome"/>
+
         <activity android:name=".view.ui.teacherHome.TeacherHome" />
         <activity
             android:name=".view.ui.teacherList.TeacherList"
@@ -45,7 +48,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.ui.login.LoginActivity"></activity>
+        <activity android:name=".view.ui.login.LoginActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

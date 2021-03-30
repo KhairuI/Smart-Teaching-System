@@ -18,10 +18,11 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.adapter.TeacherAppointmentAdapter;
+import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.model.Teacher;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
-import com.example.smartteachingsystem.view.view.TeacherAppointment;
-import com.example.smartteachingsystem.view.view.TeacherEditProfile;
+import com.example.smartteachingsystem.view.ui.profileTeacher.ProfileTeacher;
+import com.example.smartteachingsystem.view.ui.teacherAppointment.TeacherAppointment;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,6 +38,7 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppoi
     private TextView teacherName, teacherId;
     private RecyclerView recyclerView;
     private TeacherHomeViewModel teacherHomeViewModel;
+    private Teacher newTeacher;
 
 
     // Dependency Injection
@@ -75,6 +77,7 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppoi
         teacherHomeViewModel.observeTeacherInfo().observe(this, new Observer<Teacher>() {
             @Override
             public void onChanged(Teacher teacher) {
+                newTeacher= teacher;
                 requestManager.load(teacher.getImage()).into(teacherProfileImage);
                 teacherName.setText(teacher.getName());
                 teacherId.setText(teacher.getId());
@@ -106,7 +109,9 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppoi
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if(item.getItemId()==R.id.editId){
-            Intent intent= new Intent(TeacherHome.this, TeacherEditProfile.class);
+
+            Intent intent= new Intent(TeacherHome.this, ProfileTeacher.class);
+            intent.putExtra("teacher",newTeacher);
             startActivity(intent);
 
         }
@@ -115,8 +120,7 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppoi
             goToLoginActivity();
         }
         else if(item.getItemId()==R.id.aboutId){
-            Intent intent= new Intent(TeacherHome.this, TeacherAppointment.class);
-            startActivity(intent);
+            showSnackBar("About");
 
         }
         return super.onOptionsItemSelected(item);
@@ -131,8 +135,12 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppoi
 
     @Override
     public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-        String name= documentSnapshot.getString("name");
-        showSnackBar(name);
+        StudentApp studentApp= documentSnapshot.toObject(StudentApp.class);
+        Intent intent= new Intent(TeacherHome.this,TeacherAppointment.class);
+        intent.putExtra("studentAppointment",studentApp);
+        startActivity(intent);
+        //String name= documentSnapshot.getString("name");
+        //showSnackBar(name);
     }
 
     @Override
