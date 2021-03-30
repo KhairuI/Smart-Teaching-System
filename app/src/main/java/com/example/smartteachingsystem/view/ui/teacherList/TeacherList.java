@@ -32,7 +32,7 @@ import dagger.android.support.DaggerAppCompatActivity;
 public class TeacherList extends DaggerAppCompatActivity implements TeacherAdapter.OnItemClickListener {
     // Declare all views..
     private RecyclerView teacherList;
-    private Toolbar toolbar;
+  //  private Toolbar toolbar;
   //  private TeacherAdapter teacherAdapter;
     private TeacherListViewModel teacherListViewModel;
 
@@ -68,9 +68,12 @@ public class TeacherList extends DaggerAppCompatActivity implements TeacherAdapt
     private void setRecycleView() {
         teacherList.setHasFixedSize(true);
         teacherList.setLayoutManager(new LinearLayoutManager(this));
-        teacherList.setAdapter(adapter);
-        adapter.setOnItemClickListener(this);
-        adapter.startListening();
+        if(adapter!= null){
+            teacherList.setAdapter(adapter);
+            adapter.setOnItemClickListener(this);
+            adapter.startListening();
+        }
+
 
     }
 
@@ -98,9 +101,9 @@ public class TeacherList extends DaggerAppCompatActivity implements TeacherAdapt
 
     private void findSection() {
         teacherList= findViewById(R.id.teacherListRecycleId);
-        toolbar= findViewById(R.id.teacherListToolbarId);
+       /* toolbar= findViewById(R.id.teacherListToolbarId);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
     }
 

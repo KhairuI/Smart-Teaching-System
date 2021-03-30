@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".view.ui.teacherList.TeacherList">
 
-    <RelativeLayout
+    <!--
+      <RelativeLayout
         android:id="@+id/topToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -16,9 +17,12 @@
         </include>
     </RelativeLayout>
 
+    -->
+
+
     <RelativeLayout
         android:layout_margin="3dp"
-        android:layout_below="@id/topToolbar"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
