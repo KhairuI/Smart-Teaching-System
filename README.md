@@ -8,7 +8,7 @@ main work this apps. But it can be used like Doctor-Patient appointment or Emplo
 ![Untitled-2](https://user-images.githubusercontent.com/48696824/114758766-2ad5e380-9d7f-11eb-88ce-fc2a1c0741f0.jpg)
 
 # Using Components
-01. Database: Firebase FireStore
+01. Database: Firebase Cloud FireStore, Firebase Storage
 02. Dependency Injection: Dagger(2.3)
 03. Retrofit: For notification response
 04. Rx Java
