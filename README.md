@@ -14,3 +14,13 @@ main work this apps.
 04. Rx Java
 05. MVVM Architecture Component
 06. View Model & Live Data
+07. AndroidX
+08. Language: Java
+
+# App Features
+01. Email & Password Login with Firebase
+02. Teacher/Student Registration with some information
+03. If Student -> Student can see the all teacher list. And make appointment to any teacher with reason. 
+04. If Teacher -> Teacher can see all appointment list of student. And teacher can accept or decline of appointment. 
+05. Notified both Teacher and Student. 
+
