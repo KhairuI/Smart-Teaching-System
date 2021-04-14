@@ -6,3 +6,11 @@ main work this apps.
 
 # Over View
 ![Untitled-2](https://user-images.githubusercontent.com/48696824/114758766-2ad5e380-9d7f-11eb-88ce-fc2a1c0741f0.jpg)
+
+# Using Components
+01. Database: Firebase FireStore
+02. Dependency Injection: Dagger(2.3)
+03. Retrofit: For notification response
+04. Rx Java
+05. MVVM Architecture Component
+06. View Model & Live Data
