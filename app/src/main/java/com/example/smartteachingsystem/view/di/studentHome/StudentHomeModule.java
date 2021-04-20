@@ -1,6 +1,7 @@
 package com.example.smartteachingsystem.view.di.studentHome;
 
 import com.bumptech.glide.RequestManager;
+import com.example.smartteachingsystem.view.adapter.StudentAppAdapter;
 import com.example.smartteachingsystem.view.adapter.StudentAppointmentAdapter;
 import com.example.smartteachingsystem.view.model.TeacherApp;
 import com.example.smartteachingsystem.view.repository.FirebaseDataRepository;
@@ -20,6 +21,11 @@ public class StudentHomeModule {
     @Provides
     static StudentAppointmentAdapter provideStudentAppointmentAdapter(FirestoreRecyclerOptions<TeacherApp> options, RequestManager requestManager){
         return new StudentAppointmentAdapter(options,requestManager);
+    }
+
+    @Provides
+    static StudentAppAdapter provideStudentAppAdapter(RequestManager requestManager){
+        return new StudentAppAdapter(requestManager);
     }
 
 }

@@ -16,6 +16,11 @@ import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.model.TeacherApp;
 import com.example.smartteachingsystem.view.model.Teacher_List;
+import com.example.smartteachingsystem.view.model.Token;
+import com.example.smartteachingsystem.view.notification.APIService;
+import com.example.smartteachingsystem.view.notification.Data;
+import com.example.smartteachingsystem.view.notification.MyResponse;
+import com.example.smartteachingsystem.view.notification.NotificationSender;
 import com.example.smartteachingsystem.view.ui.studentRegister.StudentRegisterViewModel;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
@@ -34,6 +39,9 @@ import io.reactivex.functions.Function;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.functions.BiFunction;
 import kotlin.jvm.functions.Function1;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class StudentAppointment extends DaggerAppCompatActivity implements View.OnClickListener {
     private Toolbar toolbar;
@@ -53,6 +61,9 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
     @Inject
     RequestManager requestManager;
 
+    @Inject
+    APIService apiService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +75,42 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
 
         appointmentViewModel= new ViewModelProvider(getViewModelStore(),providerFactory).get(StudentAppointmentViewModel.class);
         appointmentObserve();
+
+
     }
+
+    private void tokenObserver() {
+        appointmentViewModel.observeStudentToken().observe(this, new Observer<Token>() {
+            @Override
+            public void onChanged(Token token) {
+                sendNotification(token.getToken(),token.getName());
+            }
+        });
+    }
+
+    private void sendNotification(String token, String name) {
+        Data data= new Data(name+" request for appointment",editText.getText().toString());
+        NotificationSender sender= new NotificationSender(data,token);
+        apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                if(response.code()==200){
+                    if(response.body().success != 1){
+                        //showSnackBar("failed");
+                    }
+                    else {
+                     //   showSnackBar("Success");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+                showSnackBar("Request Fail");
+            }
+        });
+    }
+
 
     private void appointmentObserve() {
         appointmentViewModel.observeStudentAppointment().observe(this, new Observer<StateResource>() {
@@ -78,6 +124,8 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
                         case SUCCESS:
                             progressBar.setVisibility(View.INVISIBLE);
                             showSnackBar("Submit Successfully");
+                            appointmentViewModel.getToken(list.getuId());
+                            tokenObserver();
                             //goToStudentProfile();
                             break;
                         case ERROR:

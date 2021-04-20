@@ -6,11 +6,15 @@ import com.example.smartteachingsystem.view.di.profileStudent.ProfileStudentView
 import com.example.smartteachingsystem.view.di.profileTeacher.ProfileTeacherViewModelModule;
 import com.example.smartteachingsystem.view.di.register.RegisterViewModelModule;
 import com.example.smartteachingsystem.view.di.splash.SplashViewModelModule;
+import com.example.smartteachingsystem.view.di.studentAppointment.StudentAppModule;
 import com.example.smartteachingsystem.view.di.studentAppointment.StudentAppViewModelModule;
+import com.example.smartteachingsystem.view.di.studentEdit.StudentEditViewModelModule;
 import com.example.smartteachingsystem.view.di.studentHome.StudentHomeModule;
 import com.example.smartteachingsystem.view.di.studentHome.StudentHomeViewModelModule;
 import com.example.smartteachingsystem.view.di.studentRegister.StudentRegViewModelModule;
+import com.example.smartteachingsystem.view.di.teacherAppointment.TeacherAppModule;
 import com.example.smartteachingsystem.view.di.teacherAppointment.TeacherAppViewModelModule;
+import com.example.smartteachingsystem.view.di.teacherEdit.TeacherEditViewModelModule;
 import com.example.smartteachingsystem.view.di.teacherHome.TeacherHomeModule;
 import com.example.smartteachingsystem.view.di.teacherList.TeacherListModule;
 import com.example.smartteachingsystem.view.di.teacherList.TeacherListViewModelModule;
@@ -23,9 +27,11 @@ import com.example.smartteachingsystem.view.ui.account.AccountActivity;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
 import com.example.smartteachingsystem.view.ui.register.RegisterActivity;
 import com.example.smartteachingsystem.view.ui.studentAppointment.StudentAppointment;
+import com.example.smartteachingsystem.view.ui.studentEdit.StudentEditProfile;
 import com.example.smartteachingsystem.view.ui.studentHome.StudentHome;
 import com.example.smartteachingsystem.view.ui.studentRegister.StudentRegister;
 import com.example.smartteachingsystem.view.ui.teacherAppointment.TeacherAppointment;
+import com.example.smartteachingsystem.view.ui.teacherEdit.TeacherEditProfile;
 import com.example.smartteachingsystem.view.ui.teacherList.TeacherList;
 import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHome;
 import com.example.smartteachingsystem.view.ui.teacherRegister.TeacherRegister;
@@ -115,7 +121,8 @@ public abstract class ActivityBuilderModule {
     // Student Appointment Activity
     @ContributesAndroidInjector(
             modules = {
-                    StudentAppViewModelModule.class
+                    StudentAppViewModelModule.class,
+                    StudentAppModule.class
             }
     )
     abstract StudentAppointment contributeStudentAppointment();
@@ -123,7 +130,8 @@ public abstract class ActivityBuilderModule {
     // Teacher Appointment Activity
     @ContributesAndroidInjector(
             modules = {
-                    TeacherAppViewModelModule.class
+                    TeacherAppViewModelModule.class,
+                    TeacherAppModule.class
             }
     )
     abstract TeacherAppointment contributeTeacherAppointment();
@@ -146,6 +154,24 @@ public abstract class ActivityBuilderModule {
             }
     )
     abstract ProfileTeacher contributeProfileTeacher();
+
+    // Student Edit Profile Activity
+
+    @ContributesAndroidInjector(
+            modules = {
+                    StudentEditViewModelModule.class
+            }
+    )
+    abstract StudentEditProfile contributeStudentEditProfile();
+
+    // Teacher Edit Profile Activity
+
+    @ContributesAndroidInjector(
+            modules = {
+                    TeacherEditViewModelModule.class
+            }
+    )
+    abstract TeacherEditProfile contributeTeacherEditProfile();
 
 
 }

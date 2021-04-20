@@ -1,44 +1,64 @@
 package com.example.smartteachingsystem.view.ui.studentHome;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
+import com.example.smartteachingsystem.view.adapter.StudentAppAdapter;
 import com.example.smartteachingsystem.view.adapter.StudentAppointmentAdapter;
 import com.example.smartteachingsystem.view.model.Student;
+import com.example.smartteachingsystem.view.model.TeacherApp;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
 import com.example.smartteachingsystem.view.ui.profileStudent.ProfileStudent;
 import com.example.smartteachingsystem.view.ui.teacherList.TeacherList;
+import com.example.smartteachingsystem.view.utils.DetailsDialogue;
+import com.example.smartteachingsystem.view.utils.Resource;
+import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.installations.InstallationTokenResult;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class StudentHome extends DaggerAppCompatActivity implements View.OnClickListener,StudentAppointmentAdapter.OnItemClickListener {
+public class StudentHome extends DaggerAppCompatActivity implements View.OnClickListener,StudentAppAdapter.OnItemClickListener{
     // declare all views...
     private CircleImageView profileImage;
     private TextView profileName, studentId;
     private FloatingActionButton button;
+    private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
+    private List<TeacherApp> newList= new ArrayList<>();
 
     private Student newStudent;
     private StudentHomeViewModel studentHomeViewModel;
@@ -50,10 +70,13 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
     ViewModelProviderFactory providerFactory;
 
     @Inject
-    RequestManager requestManager;
+    StudentAppAdapter adapter;
 
     @Inject
-    StudentAppointmentAdapter adapter;
+    RequestManager requestManager;
+
+   /* @Inject
+    StudentAppointmentAdapter adapter;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +85,30 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
         findSection();
         studentHomeViewModel = new ViewModelProvider(getViewModelStore(),providerFactory).get(StudentHomeViewModel.class);
         studentHomeViewModel.getStudentInfo();
+        studentHomeViewModel.getStudent();
         observeStudentInfo();
+        observeStudent();
         setRecycleView();
+        updateToken();
+
+    }
+
+    private void updateToken() {
+
+        String value= FirebaseInstanceId.getInstance().getToken();
+        studentHomeViewModel.setToken(value);
+    }
+
+    private void observeStudent() {
+
+        studentHomeViewModel.observeStudent().observe(this, new Observer<List<TeacherApp>>() {
+            @Override
+            public void onChanged(List<TeacherApp> list) {
+                newList= list;
+                progressBar.setVisibility(View.GONE);
+                adapter.setList(newList);
+            }
+        });
     }
 
     private void setRecycleView() {
@@ -72,7 +117,8 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
-        adapter.startListening();
+        /*adapter.setOnItemClickListener(this);
+        adapter.startListening();*/
 
     }
 
@@ -93,6 +139,7 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
         setSupportActionBar(toolbar);
         profileImage= findViewById(R.id.studentProfileImageId);
         profileName= findViewById(R.id.studentProfileNameId);
+        progressBar= findViewById(R.id.studentHomeProgressId);
         studentId= findViewById(R.id.studentProfileUniversityId);
         recyclerView= findViewById(R.id.studentRecycleViewId);
         button= findViewById(R.id.studentInsertId);
@@ -148,21 +195,70 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-        String name= documentSnapshot.getString("name");
-        showSnackBar(name);
+    public void onItemClick(int position) {
+
+        openDialogue(newList.get(position));
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
+
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
+    public void onLongItemClick(int position) {
+
+        String key= newList.get(position).getPushKey();
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setTitle("Delete").setIcon(R.drawable.ic_delete).setMessage("Do you want to delete ?")
+                .setCancelable(true).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               String value= newList.get(position).getStatus();
+               if(value.equals("Pending")){
+                   showSnackBar("Pending appointment can not deleted");
+               }
+               else {
+                   studentHomeViewModel.studentDelete(key);
+                   observeDelete(position);
+               }
+
+            }
+        }).create().show();
+
     }
+
+    private void observeDelete(int position) {
+        studentHomeViewModel.observeStudentDelete().observe(this, new Observer<StateResource>() {
+            @Override
+            public void onChanged(StateResource stateResource) {
+                switch (stateResource.status){
+                    case LOADING:
+                        progressBar.setVisibility(View.VISIBLE);
+                        break;
+                    case ERROR:
+                        progressBar.setVisibility(View.GONE);
+                        showSnackBar(stateResource.message);
+                        break;
+                    case SUCCESS:
+                        progressBar.setVisibility(View.GONE);
+                        newList.remove(position);
+                        adapter.notifyItemRemoved(position);
+                        showSnackBar("Delete successfully");
+                        break;
+                }
+            }
+        });
+    }
+
+    private void openDialogue(TeacherApp teacherApp) {
+
+        DetailsDialogue detailsDialogue= new DetailsDialogue(teacherApp);
+        detailsDialogue.show(getSupportFragmentManager(),"Details Dialogue");
+    }
+
+
 
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".view.ui.teacherList.TeacherList">
 
-    <!--
+
       <RelativeLayout
         android:id="@+id/topToolbar"
         android:layout_width="match_parent"
@@ -17,12 +17,9 @@
         </include>
     </RelativeLayout>
 
-    -->
-
-
     <RelativeLayout
-        android:layout_margin="3dp"
 
+        android:layout_below="@id/topToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -36,5 +33,13 @@
         </androidx.recyclerview.widget.RecyclerView>
 
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/allTeacherProgressId"
+        android:layout_centerInParent="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp">
+
+    </ProgressBar>
 
 </RelativeLayout>

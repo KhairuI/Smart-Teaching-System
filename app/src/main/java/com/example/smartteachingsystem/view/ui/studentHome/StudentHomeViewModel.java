@@ -7,14 +7,20 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.smartteachingsystem.view.model.Student;
+import com.example.smartteachingsystem.view.model.TeacherApp;
 import com.example.smartteachingsystem.view.repository.AuthRepository;
 import com.example.smartteachingsystem.view.repository.FirebaseDataRepository;
+import com.example.smartteachingsystem.view.utils.Resource;
+import com.example.smartteachingsystem.view.utils.StateResource;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -25,7 +31,9 @@ public class StudentHomeViewModel extends ViewModel {
     private FirebaseDataRepository firebaseDataRepository;
     private AuthRepository authRepository;
 
-    private MediatorLiveData<Student> onStudentProfileInfo = new MediatorLiveData<>();
+    private final MediatorLiveData<Student> onStudentProfileInfo = new MediatorLiveData<>();
+    private final MediatorLiveData<List<TeacherApp>> onStudent = new MediatorLiveData<>();
+    private final MediatorLiveData<StateResource> onStudentDelete = new MediatorLiveData<>();
     private CompositeDisposable disposable = new CompositeDisposable();
 
     @Inject
@@ -33,6 +41,39 @@ public class StudentHomeViewModel extends ViewModel {
         Log.d(TAG, "StudentProfileViewModel: is working...");
         this.firebaseDataRepository= firebaseDataRepository;
         this.authRepository= authRepository;
+    }
+
+    // student Appointment delete .....
+
+    public void studentDelete(String pushKey){
+        firebaseDataRepository.studentDelete(pushKey)
+                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread()).subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                disposable.add(d);
+                onStudentDelete.setValue(StateResource.loading());
+            }
+
+            @Override
+            public void onComplete() {
+                onStudentDelete.setValue(StateResource.success());
+
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+                onStudentDelete.setValue(StateResource.error(e.toString()));
+            }
+        });
+
+    }
+
+
+    // set student Token.....
+    public void setToken(String token){
+        firebaseDataRepository.setToken(token);
     }
 
     public void getStudentInfo(){
@@ -61,9 +102,48 @@ public class StudentHomeViewModel extends ViewModel {
         });
     }
 
+    public void getStudent(){
+        firebaseDataRepository.getStudent().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .toObservable().subscribe(new Observer<List<TeacherApp>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                disposable.add(d);
+            }
+
+            @Override
+            public void onNext(@NonNull List<TeacherApp> teacherApps) {
+
+                onStudent.setValue(teacherApps);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+
+            }
+
+            @Override
+            public void onComplete() {
+
+
+            }
+        });
+    }
+
     public LiveData<Student> observeStudentInfo(){
         return onStudentProfileInfo;
     }
+    public LiveData<List<TeacherApp>> observeStudent(){
+        return onStudent;
+    }
+
+    // student delete observer.....
+
+    public LiveData<StateResource> observeStudentDelete(){
+        return onStudentDelete;
+    }
+
+
 
     // logout
     public void logout(){

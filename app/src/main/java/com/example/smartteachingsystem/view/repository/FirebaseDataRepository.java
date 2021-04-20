@@ -9,8 +9,11 @@ import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.model.Teacher;
 import com.example.smartteachingsystem.view.model.TeacherApp;
 import com.example.smartteachingsystem.view.model.Teacher_List;
+import com.example.smartteachingsystem.view.model.Token;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,6 +27,22 @@ public class FirebaseDataRepository {
      @Inject
     public FirebaseDataRepository(FirebaseDataSource firebaseDataSource) {
         this.firebaseDataSource = firebaseDataSource;
+    }
+
+    // set Token...
+    public void setToken(String token){
+         firebaseDataSource.setToken(token);
+    }
+
+    // get Token
+    public Flowable<Token> getToken(String value){
+         return firebaseDataSource.getToken(value);
+    }
+
+     // teacher get Student Token.....
+
+    public Flowable<Token> getStudentToken(String value){
+         return firebaseDataSource.getStudentToken(value);
     }
 
     // set student data...
@@ -49,7 +68,7 @@ public class FirebaseDataRepository {
 
     // **** Retrieve teacher list here.
 
-    public Flowable<FirestoreRecyclerOptions<Teacher_List>> getTeacher(){
+    public Flowable<List<Teacher_List>> getTeacher(){
         return firebaseDataSource.getTeacher();
     }
 
@@ -61,6 +80,16 @@ public class FirebaseDataRepository {
 
     public FirestoreRecyclerOptions<TeacherApp> getAllStudentAppointment(){
         return firebaseDataSource.getAllStudentAppointment();
+    }
+
+    // get student appointment alternatively....
+    public Flowable<List<TeacherApp>> getStudent(){
+         return firebaseDataSource.getStudent();
+    }
+
+    // get teacher appointment alternatively....
+    public Flowable<List<StudentApp>> getStudentAppointment(){
+        return firebaseDataSource.getStudentAppointment();
     }
 
     // get teacher appointment....
@@ -78,6 +107,17 @@ public class FirebaseDataRepository {
     // save teacher response. This response save in both teacher & student directory...
     public Completable setTeacherResponse(Response response){
          return firebaseDataSource.setTeacherResponse(response);
+    }
+
+    // student appointment delete......
+
+    public Completable studentDelete(String pushKey){
+         return firebaseDataSource.studentDelete(pushKey);
+    }
+
+    // teacher appointment delete......
+    public Completable teacherDelete(String pushKey){
+        return firebaseDataSource.teacherDelete(pushKey);
     }
 
 }

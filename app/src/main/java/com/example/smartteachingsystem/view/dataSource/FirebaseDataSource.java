@@ -11,9 +11,11 @@ import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.model.Teacher;
 import com.example.smartteachingsystem.view.model.TeacherApp;
 import com.example.smartteachingsystem.view.model.Teacher_List;
+import com.example.smartteachingsystem.view.model.Token;
 import com.example.smartteachingsystem.view.utils.DataConverter;
 import com.example.smartteachingsystem.view.utils.Nodes;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,7 +31,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -59,6 +63,108 @@ public class FirebaseDataSource {
         this.fireStore = fireStore;
         this.storageReference = storageReference;
         currentUid= firebaseAuthSource.getCurrentUid();
+    }
+
+    // teacher get Student Token.....
+    public Flowable<Token> getStudentToken(String uId){
+
+        return Flowable.create(new FlowableOnSubscribe<Token>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<Token> emitter) throws Throwable {
+                fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid)
+                        .collection("profile").document("profile_key").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+
+                        DocumentSnapshot documentSnapshot= task.getResult();
+                        if(documentSnapshot!=null){
+                            String name= documentSnapshot.getString("name");
+
+                            fireStore.collection(Nodes.TOKENS).document(uId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                                    DocumentSnapshot documentSnapshot= task.getResult();
+                                    if(documentSnapshot!=null){
+                                        String userToken= documentSnapshot.getString("token");
+                                        Token token = new Token(name,userToken);
+                                        emitter.onNext(token);
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@androidx.annotation.NonNull Exception e) {
+                                    emitter.onError(e);
+                                }
+                            });
+                        }
+
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        },BackpressureStrategy.BUFFER);
+
+    }
+
+
+    // get user Token....
+    public Flowable<Token> getToken(String uId){
+
+
+        return Flowable.create(new FlowableOnSubscribe<Token>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<Token> emitter) throws Throwable {
+                fireStore.collection(Nodes.STUDENTS_PROFILE).document(currentUid)
+                        .collection("profile").document("profile_key").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+
+                        DocumentSnapshot documentSnapshot= task.getResult();
+                        if(documentSnapshot!=null){
+                            String name= documentSnapshot.getString("name");
+
+                            fireStore.collection(Nodes.TOKENS).document(uId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                                    DocumentSnapshot documentSnapshot= task.getResult();
+                                    if(documentSnapshot!=null){
+                                        String userToken= documentSnapshot.getString("token");
+                                        Token token = new Token(name,userToken);
+                                        emitter.onNext(token);
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@androidx.annotation.NonNull Exception e) {
+                                    emitter.onError(e);
+                                }
+                            });
+                        }
+
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        },BackpressureStrategy.BUFFER);
+
+    }
+
+    // set user token.....
+
+    public void setToken(String token){
+        Map<String,String> tokenMap= new HashMap<>();
+        tokenMap.put("token",token);
+        fireStore.collection(Nodes.TOKENS).document(currentUid).set(tokenMap);
     }
 
     // set student data....
@@ -295,34 +401,31 @@ public class FirebaseDataSource {
         }, BackpressureStrategy.BUFFER);
     }
 
-    // **** Retrieve teacher list here......
+    // **** Retrieve teacher list  alternatively here......
 
-    public Flowable<FirestoreRecyclerOptions<Teacher_List> > getTeacher(){
-        return Flowable.create(new FlowableOnSubscribe<FirestoreRecyclerOptions<Teacher_List>>() {
+    public Flowable<List<Teacher_List> > getTeacher(){
+        final List<Teacher_List> teacherLists= new ArrayList<>();
+        return Flowable.create(new FlowableOnSubscribe<List<Teacher_List>>() {
             @Override
-            public void subscribe(@NonNull FlowableEmitter<FirestoreRecyclerOptions<Teacher_List>> emitter) throws Throwable {
-               Query query= fireStore.collection(Nodes.ALL_TEACHERS);
-                final ListenerRegistration registration= query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            public void subscribe(@NonNull FlowableEmitter<List<Teacher_List>> emitter) throws Throwable {
+                fireStore.collection(Nodes.ALL_TEACHERS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if(e!= null){
-                            emitter.onError(e);
+                    public void onComplete(@androidx.annotation.NonNull Task<QuerySnapshot> task) {
+                        teacherLists.clear();
+                        for(DocumentSnapshot dc:task.getResult()){
+
+                            Teacher_List teacherList= dc.toObject(Teacher_List.class);
+                            teacherLists.add(teacherList);
                         }
-                        if(value != null){
-                            FirestoreRecyclerOptions<Teacher_List> options= new FirestoreRecyclerOptions.Builder<Teacher_List>()
-                                    .setQuery(query, Teacher_List.class).build();
-                            emitter.onNext(options);
-                        }
+                        emitter.onNext(teacherLists);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
                     }
                 });
-
-                emitter.setCancellable(new Cancellable() {
-                    @Override
-                    public void cancel() throws Throwable {
-                        registration.remove();
-                    }
-                });
-
             }
         },BackpressureStrategy.BUFFER);
     }
@@ -350,7 +453,67 @@ public class FirebaseDataSource {
         return new FirestoreRecyclerOptions.Builder<TeacherApp>().setQuery(getStudentQuery(), TeacherApp.class).build();
     }
 
+    // get student appointment alternatively.....
+    public Flowable<List<TeacherApp>> getStudent(){
+        final List<TeacherApp> appList= new ArrayList<>();
+        return Flowable.create(new FlowableOnSubscribe<List<TeacherApp>>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<List<TeacherApp>> emitter) throws Throwable {
+
+                fireStore.collection(Nodes.STUDENTS_PROFILE).document(currentUid).collection("appointment").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<QuerySnapshot> task) {
+                        appList.clear();
+                        for(DocumentSnapshot dc:task.getResult()){
+
+                            TeacherApp teacherApp= dc.toObject(TeacherApp.class);
+                            appList.add(teacherApp);
+                        }
+                        emitter.onNext(appList);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        },BackpressureStrategy.BUFFER);
+    }
+
+
     //   ******//
+
+    //  get teacher appointment alternatively.....
+
+    public Flowable<List<StudentApp>> getStudentAppointment(){
+        final List<StudentApp> appList= new ArrayList<>();
+        return Flowable.create(new FlowableOnSubscribe<List<StudentApp>>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<List<StudentApp>> emitter) throws Throwable {
+
+                fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid).collection("appointment").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<QuerySnapshot> task) {
+                        appList.clear();
+                        for(DocumentSnapshot dc:task.getResult()){
+
+                            StudentApp studentApp= dc.toObject(StudentApp.class);
+                            appList.add(studentApp);
+                        }
+                        emitter.onNext(appList);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        },BackpressureStrategy.BUFFER);
+    }
 
     // get teacher appointment list from teacher directory.....
 
@@ -501,6 +664,54 @@ public class FirebaseDataSource {
                     }
                 });
 
+            }
+        });
+    }
+
+    // student appointment delete......
+
+    public Completable studentDelete(String pushKey){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+
+                final DocumentReference student_reference= fireStore.collection(Nodes.STUDENTS_PROFILE).document(currentUid)
+                        .collection("appointment").document(pushKey);
+                student_reference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        emitter.onComplete();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        });
+    }
+
+    // teacher appointment delete......
+
+    public Completable teacherDelete(String pushKey){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+
+                final DocumentReference teacher_reference= fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid)
+                        .collection("appointment").document(pushKey);
+                teacher_reference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        emitter.onComplete();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
             }
         });
     }

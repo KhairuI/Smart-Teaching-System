@@ -1,20 +1,17 @@
 package com.example.smartteachingsystem.view.ui.profileStudent;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.model.Student;
-import com.example.smartteachingsystem.view.ui.studentHome.StudentHomeViewModel;
-import com.example.smartteachingsystem.view.view.StudentEditProfile;
+import com.example.smartteachingsystem.view.ui.studentEdit.StudentEditProfile;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -56,7 +53,7 @@ public class ProfileStudent extends DaggerAppCompatActivity implements View.OnCl
         name.setText(student.getName());
         id.setText(student.getId());
         email.setText(student.getEmail());
-        dept.setText(student.getDepartment()+" dept. of "+student.getDepartment());
+        dept.setText("Dept. of "+student.getDepartment()+" | "+student.getSection());
         phone.setText(student.getPhone());
     }
 
@@ -82,6 +79,7 @@ public class ProfileStudent extends DaggerAppCompatActivity implements View.OnCl
     public void onClick(View view) {
         if(view.getId()==R.id.studentEditButtonId){
             Intent intent= new Intent(ProfileStudent.this,StudentEditProfile.class);
+            intent.putExtra("editStudent",student);
             startActivity(intent);
         }
 

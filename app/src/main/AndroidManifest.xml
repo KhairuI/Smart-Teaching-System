@@ -25,7 +25,7 @@
         <activity
             android:name=".view.ui.studentAppointment.StudentAppointment"
             android:parentActivityName=".view.ui.teacherList.TeacherList" />
-        <activity android:name=".view.view.TeacherEditProfile" />
+        <activity android:name=".view.ui.teacherEdit.TeacherEditProfile" />
         <activity android:name=".view.ui.teacherAppointment.TeacherAppointment"
             android:parentActivityName=".view.ui.teacherHome.TeacherHome"/>
 
@@ -33,7 +33,8 @@
         <activity
             android:name=".view.ui.teacherList.TeacherList"
             android:parentActivityName=".view.ui.studentHome.StudentHome" />
-        <activity android:name=".view.view.StudentEditProfile" />
+        <activity android:name=".view.ui.studentEdit.StudentEditProfile"
+            android:parentActivityName=".view.ui.profileStudent.ProfileStudent"/>
         <activity android:name=".view.ui.studentHome.StudentHome" />
         <activity android:name=".view.ui.teacherRegister.TeacherRegister" />
         <activity android:name=".view.ui.studentRegister.StudentRegister" />
@@ -52,6 +53,24 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
+
+        <service
+            android:name=".view.notification.MyFireBaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".view.notification.MyFirebaseIdService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.dataSource.FirebaseAuthSource;
 import com.example.smartteachingsystem.view.dataSource.FirebaseDataSource;
+import com.example.smartteachingsystem.view.notification.BaseUrl;
 import com.example.smartteachingsystem.view.repository.AuthRepository;
 import com.example.smartteachingsystem.view.repository.FirebaseDataRepository;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,9 +20,19 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class AppModule {
+
+    // for retrofit...
+    @Singleton
+    @Provides
+    static Retrofit provideRetrofit(){
+        return new Retrofit.Builder().baseUrl(BaseUrl.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+    }
 
     // get Firebase Auth Instance
     @Singleton

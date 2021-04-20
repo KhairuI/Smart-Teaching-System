@@ -18,6 +18,11 @@ import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.model.Response;
 import com.example.smartteachingsystem.view.model.StudentApp;
+import com.example.smartteachingsystem.view.model.Token;
+import com.example.smartteachingsystem.view.notification.APIService;
+import com.example.smartteachingsystem.view.notification.Data;
+import com.example.smartteachingsystem.view.notification.MyResponse;
+import com.example.smartteachingsystem.view.notification.NotificationSender;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,6 +32,8 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class TeacherAppointment extends DaggerAppCompatActivity implements View.OnClickListener {
     private Toolbar toolbar;
@@ -37,6 +44,7 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
     private CircleImageView imageView;
     private StudentApp studentApp;
     private TeacherAppointmentViewModel viewModel;
+    String result="";
 
     // Dependency Injection
     @Inject
@@ -44,6 +52,9 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
 
     @Inject
     RequestManager requestManager;
+
+    @Inject
+    APIService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +69,38 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
 
     }
 
+    private void observeToken() {
+        viewModel.observeTeacherToken().observe(this, new Observer<Token>() {
+            @Override
+            public void onChanged(Token token) {
+                sendNotification(token.getToken(),token.getName());
+            }
+        });
+    }
+
+    private void sendNotification(String token, String name) {
+        Data data= new Data(name+" "+result+" your appointment",editText.getText().toString());
+        NotificationSender sender= new NotificationSender(data,token);
+        apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call, retrofit2.Response<MyResponse> response) {
+                if(response.code()==200){
+                    if(response.body().success != 1){
+                        //showSnackBar("failed");
+                    }
+                    else {
+                     //   showSnackBar("Success");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+                showSnackBar("Request Fail");
+            }
+        });
+    }
+
     private void observeResponse() {
         viewModel.observeTeacherResponse().observe(this, new Observer<StateResource>() {
             @Override
@@ -70,7 +113,8 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
                         case SUCCESS:
                             progressBar.setVisibility(View.INVISIBLE);
                             showSnackBar("Response Successfully");
-                            //goToStudentProfile();
+                            viewModel.getToken(studentApp.getuId());
+                            observeToken();
                             break;
                         case ERROR:
                             progressBar.setVisibility(View.INVISIBLE);
@@ -141,6 +185,7 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
                 editText.setError("Please enter a comment");
             }
             else {
+                result="approve";
                 Response response= new Response("Approve",editText.getText().toString(),studentApp.getPushKey(),studentApp.getuId());
                 viewModel.teacherResponse(response);
             }
@@ -152,6 +197,7 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
                 editText.setError("Please enter a comment");
             }
             else {
+                result="decline";
                 Response response= new Response("Decline",editText.getText().toString(),studentApp.getPushKey(),studentApp.getuId());
                 viewModel.teacherResponse(response);
             }

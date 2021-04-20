@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:text="Status"
+        android:id="@+id/detailsStatusId"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:textSize="22sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+    <TextView
+        android:text="Message Head"
+        android:id="@+id/detailsMessageHeadId"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+    <TextView
+        android:text="Message Body"
+        android:id="@+id/detailsMessageBodyId"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+</LinearLayout>

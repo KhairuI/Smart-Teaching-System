@@ -1,6 +1,5 @@
 package com.example.smartteachingsystem.view.ui.profileTeacher;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -12,8 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.model.Teacher;
-import com.example.smartteachingsystem.view.ui.profileStudent.ProfileStudentViewModel;
-import com.example.smartteachingsystem.view.view.TeacherEditProfile;
+import com.example.smartteachingsystem.view.ui.teacherEdit.TeacherEditProfile;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -53,9 +51,9 @@ public class ProfileTeacher extends DaggerAppCompatActivity implements View.OnCl
 
     private void setInfo() {
 
-        toolbarName.setText(teacher.getName()+" ("+teacher.getInitial()+")");
+        toolbarName.setText(teacher.getName());
         requestManager.load(teacher.getImage()).into(image);
-        name.setText(teacher.getName());
+        name.setText(teacher.getName()+" ("+teacher.getInitial()+")");
         id.setText(teacher.getId());
         email.setText(teacher.getEmail());
         dept.setText(teacher.getDesignation()+" Dept. of "+teacher.getDepartment());

@@ -60,6 +60,14 @@
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
+    <ProgressBar
+        android:id="@+id/studentHomeProgressId"
+        android:layout_centerInParent="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp">
+
+    </ProgressBar>
+
 
 
 </RelativeLayout>

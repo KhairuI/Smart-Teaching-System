@@ -14,8 +14,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.smartteachingsystem.R;
+import com.example.smartteachingsystem.view.adapter.AllTeacherAdapter;
 import com.example.smartteachingsystem.view.adapter.TeacherAdapter;
 import com.example.smartteachingsystem.view.model.Teacher_List;
 import com.example.smartteachingsystem.view.ui.splash.SplashViewModel;
@@ -25,20 +27,28 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class TeacherList extends DaggerAppCompatActivity implements TeacherAdapter.OnItemClickListener {
+public class TeacherList extends DaggerAppCompatActivity implements AllTeacherAdapter.OnItemClickListener {
     // Declare all views..
     private RecyclerView teacherList;
-  //  private Toolbar toolbar;
+    private Toolbar toolbar;
+    private ProgressBar progressBar;
   //  private TeacherAdapter teacherAdapter;
     private TeacherListViewModel teacherListViewModel;
+    private List<Teacher_List> newList= new ArrayList<>();
 
     // Dependency Injection
+   /* @Inject
+    TeacherAdapter adapter;*/
+
     @Inject
-    TeacherAdapter adapter;
+    AllTeacherAdapter adapter;
 
     @Inject
     ViewModelProviderFactory modelProviderFactory;
@@ -49,18 +59,19 @@ public class TeacherList extends DaggerAppCompatActivity implements TeacherAdapt
         setContentView(R.layout.activity_teacher_list);
         findSection();
         teacherListViewModel= new ViewModelProvider(getViewModelStore(),modelProviderFactory).get(TeacherListViewModel.class);
-        //teacherListViewModel.getTeacher();
+        teacherListViewModel.getTeacher();
+        observeList();
         setRecycleView();
-       // observeList();
     }
 
     private void observeList() {
-        teacherListViewModel.observeTeacher().observe(this, new Observer<FirestoreRecyclerOptions<Teacher_List>>() {
+        teacherListViewModel.observeTeacher().observe(this, new Observer<List<Teacher_List>>() {
             @Override
-            public void onChanged(FirestoreRecyclerOptions<Teacher_List> list) {
-                /*teacherAdapter= new TeacherAdapter(list);
-                teacherList.setAdapter(teacherAdapter);
-                teacherAdapter.startListening();*/
+            public void onChanged(List<Teacher_List> list) {
+                newList= list;
+                progressBar.setVisibility(View.GONE);
+                adapter.setList(list);
+
             }
         });
     }
@@ -68,13 +79,8 @@ public class TeacherList extends DaggerAppCompatActivity implements TeacherAdapt
     private void setRecycleView() {
         teacherList.setHasFixedSize(true);
         teacherList.setLayoutManager(new LinearLayoutManager(this));
-        if(adapter!= null){
-            teacherList.setAdapter(adapter);
-            adapter.setOnItemClickListener(this);
-            adapter.startListening();
-        }
-
-
+        teacherList.setAdapter(adapter);
+        adapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -93,40 +99,21 @@ public class TeacherList extends DaggerAppCompatActivity implements TeacherAdapt
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
                 return false;
             }
         });
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     private void findSection() {
-        teacherList= findViewById(R.id.teacherListRecycleId);
-       /* toolbar= findViewById(R.id.teacherListToolbarId);
+
+        toolbar= findViewById(R.id.teacherListToolbarId);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    }
-
-    @Override
-    public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-        String uId= documentSnapshot.getString("uId");
-        String name= documentSnapshot.getString("name");
-        String id= documentSnapshot.getString("id");
-        String email= documentSnapshot.getString("email");
-        String phone= documentSnapshot.getString("phone");
-        String department= documentSnapshot.getString("department");
-        String designation= documentSnapshot.getString("designation");
-        String image= documentSnapshot.getString("image");
-        String office= documentSnapshot.getString("office");
-        String counseling= documentSnapshot.getString("counseling");
-        String initial= documentSnapshot.getString("initial");
-        Teacher_List list= new Teacher_List(uId,name,id,email,phone,department,designation,image,office,counseling,initial);
-
-        // sent data in Student Appointment Activity....
-        Intent intent= new Intent(TeacherList.this, StudentAppointment.class);
-        intent.putExtra("key",list);
-        startActivity(intent);
-
+        teacherList= findViewById(R.id.teacherListRecycleId);
+        progressBar= findViewById(R.id.allTeacherProgressId);
 
     }
 
@@ -136,14 +123,12 @@ public class TeacherList extends DaggerAppCompatActivity implements TeacherAdapt
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
+    public void onItemClick(int position) {
+        Teacher_List list= newList.get(position);
+        // sent data in Student Appointment Activity....
+        Intent intent= new Intent(TeacherList.this, StudentAppointment.class);
+        intent.putExtra("key",list);
+        startActivity(intent);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
 }
