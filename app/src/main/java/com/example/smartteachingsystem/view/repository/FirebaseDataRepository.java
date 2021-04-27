@@ -29,6 +29,11 @@ public class FirebaseDataRepository {
         this.firebaseDataSource = firebaseDataSource;
     }
 
+    // update teacher counseling...
+    public Completable updateCounseling(String s){
+         return firebaseDataSource.updateCounseling(s);
+    }
+
     // set Token...
     public void setToken(String token){
          firebaseDataSource.setToken(token);
@@ -44,6 +49,27 @@ public class FirebaseDataRepository {
     public Flowable<Token> getStudentToken(String value){
          return firebaseDataSource.getStudentToken(value);
     }
+
+    // update student with image
+    public Completable updateStudentWithImage(final Student student,final Bitmap bitmap){
+         return firebaseDataSource.updateStudentWithImage(student, bitmap);
+    }
+
+    // update student without image
+    public Completable updateStudentWithoutImage(final Student student){
+         return firebaseDataSource.updateStudentWithoutImage(student);
+    }
+
+    // update teacher with image
+    public Completable updateTeacherWithImage(final Teacher teacher, final Bitmap bitmap){
+         return firebaseDataSource.updateTeacherWithImage(teacher, bitmap);
+    }
+
+    // update teacher without image
+    public Completable updateTeacherWithoutImage(final Teacher teacher){
+         return firebaseDataSource.updateTeacherWithoutImage(teacher);
+    }
+
 
     // set student data...
     public Completable setStudentData(Student student, Bitmap bitmap){

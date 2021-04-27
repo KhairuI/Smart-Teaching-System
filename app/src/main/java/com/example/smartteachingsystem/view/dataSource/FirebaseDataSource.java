@@ -51,18 +51,49 @@ import io.reactivex.rxjava3.functions.Cancellable;
 public class FirebaseDataSource {
     private static final String TAG = "FirebaseDataSource";
 
-    private FirebaseAuthSource firebaseAuthSource;
-    private FirebaseFirestore fireStore;
-    private StorageReference storageReference;
-    private String currentUid;
+    private final FirebaseFirestore fireStore;
+    private final StorageReference storageReference;
+    private final String currentUid;
     private Student student;
 
     @Inject
     public FirebaseDataSource(FirebaseAuthSource firebaseAuthSource, FirebaseFirestore fireStore, StorageReference storageReference) {
-        this.firebaseAuthSource = firebaseAuthSource;
         this.fireStore = fireStore;
         this.storageReference = storageReference;
         currentUid= firebaseAuthSource.getCurrentUid();
+    }
+
+    // update teacher counseling...
+    public Completable updateCounseling(String s){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+                final DocumentReference db_reference= fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid)
+                        .collection("profile").document("profile_key");
+                final DocumentReference all_teachers= fireStore.collection(Nodes.ALL_TEACHERS).document(currentUid);
+                db_reference.update("counseling",s).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        all_teachers.update("counseling",s).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                emitter.onComplete();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@androidx.annotation.NonNull Exception e) {
+                                emitter.onError(e);
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        });
     }
 
     // teacher get Student Token.....
@@ -166,6 +197,237 @@ public class FirebaseDataSource {
         tokenMap.put("token",token);
         fireStore.collection(Nodes.TOKENS).document(currentUid).set(tokenMap);
     }
+
+    // update teacher Data without Image.......
+    public Completable updateTeacherWithoutImage(final Teacher teacher){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+                final DocumentReference db_reference= fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid)
+                        .collection("profile").document("profile_key");
+                final DocumentReference all_teachers= fireStore.collection(Nodes.ALL_TEACHERS).document(currentUid);
+
+                // update teacher profile...
+                db_reference.update("name",teacher.getName(),
+                        "id",teacher.getId(),
+                        "email",teacher.getEmail(),
+                        "department",teacher.getDepartment(),
+                        "designation",teacher.getDesignation(),
+                        "initial",teacher.getInitial(),
+                        "office",teacher.getOffice(),
+                        "phone",teacher.getPhone()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // now update all teacher...
+                        all_teachers.update("name",teacher.getName(),
+                                "id",teacher.getId(),
+                                "email",teacher.getEmail(),
+                                "department",teacher.getDepartment(),
+                                "designation",teacher.getDesignation(),
+                                "initial",teacher.getInitial(),
+                                "office",teacher.getOffice(),
+                                "phone",teacher.getPhone()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                emitter.onComplete();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@androidx.annotation.NonNull Exception e) {
+                                emitter.onError(e);
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        });
+
+    }
+
+    // update teacher Data with Image.......
+    public Completable updateTeacherWithImage(final Teacher teacher, final Bitmap bitmap){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+                // create all paths..
+                final StorageReference reference= storageReference.child(Nodes.TEACHERS_PROFILE).child(currentUid+".jpg");
+                final DocumentReference db_reference= fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid)
+                        .collection("profile").document("profile_key");
+                final DocumentReference all_teachers= fireStore.collection(Nodes.ALL_TEACHERS).document(currentUid);
+
+                // upload image
+                reference.putBytes(DataConverter.convertImage2ByteArray(bitmap)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        reference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@androidx.annotation.NonNull Task<Uri> task) {
+                                if(!task.isSuccessful()){
+                                    emitter.onError(task.getException());
+                                }
+                                else {
+                                    // here get image url...
+                                    String imageUrl= task.getResult().toString();
+
+                                    // update teacher profile...
+                                    db_reference.update("name",teacher.getName(),
+                                            "id",teacher.getId(),
+                                            "email",teacher.getEmail(),
+                                            "department",teacher.getDepartment(),
+                                            "designation",teacher.getDesignation(),
+                                            "image",imageUrl,
+                                            "initial",teacher.getInitial(),
+                                            "office",teacher.getOffice(),
+                                            "phone",teacher.getPhone())
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // now update all teacher...
+                                            all_teachers.update("name",teacher.getName(),
+                                                    "id",teacher.getId(),
+                                                    "email",teacher.getEmail(),
+                                                    "department",teacher.getDepartment(),
+                                                    "designation",teacher.getDesignation(),
+                                                    "image",imageUrl,
+                                                    "initial",teacher.getInitial(),
+                                                    "office",teacher.getOffice(),
+                                                    "phone",teacher.getPhone()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    emitter.onComplete();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@androidx.annotation.NonNull Exception e) {
+                                                    emitter.onError(e);
+                                                }
+                                            });
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@androidx.annotation.NonNull Exception e) {
+                                            emitter.onError(e);
+                                        }
+                                    });
+
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@androidx.annotation.NonNull Exception e) {
+                                emitter.onError(e);
+                            }
+                        });
+
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+
+
+            }
+        });
+    }
+
+    // update student without image...
+    public Completable updateStudentWithoutImage(final Student student){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+                // create path..
+                final DocumentReference db_reference= fireStore.collection(Nodes.STUDENTS_PROFILE).document(currentUid)
+                        .collection("profile").document("profile_key");
+                db_reference.update("name",student.getName(),
+                        "department",student.getDepartment(),
+                        "email",student.getEmail(),
+                        "id",student.getId(),
+                        "phone",student.getPhone(),
+                        "section",student.getSection()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        emitter.onComplete();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+
+
+            }
+        });
+    }
+
+    // update student with image...
+
+    public Completable updateStudentWithImage(final Student student,final Bitmap bitmap){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+                // create path..
+                final StorageReference reference= storageReference.child(Nodes.STUDENTS_PROFILE).child(currentUid+".jpg");
+                final DocumentReference db_reference= fireStore.collection(Nodes.STUDENTS_PROFILE).document(currentUid)
+                        .collection("profile").document("profile_key");
+                reference.putBytes(DataConverter.convertImage2ByteArray(bitmap)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        reference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@androidx.annotation.NonNull Task<Uri> task) {
+                                // here get image url...
+                                String imageUrl= task.getResult().toString();
+
+                                db_reference.update("name",student.getName(),
+                                        "department",student.getDepartment(),
+                                        "email",student.getEmail(),
+                                        "id",student.getId(),
+                                        "image",imageUrl,
+                                        "phone",student.getPhone(),
+                                        "section",student.getSection())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        emitter.onComplete();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                                        emitter.onError(e);
+                                    }
+                                });
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@androidx.annotation.NonNull Exception e) {
+                                emitter.onError(e);
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+
+            }
+        });
+    }
+
+
+
 
     // set student data....
     public Completable setStudentData(final Student student, final Bitmap bitmap){

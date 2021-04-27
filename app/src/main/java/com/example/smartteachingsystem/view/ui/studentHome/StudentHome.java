@@ -159,7 +159,7 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
 
         if(item.getItemId()==R.id.editId){
             Intent intent= new Intent(StudentHome.this, ProfileStudent.class);
-            intent.putExtra("student",newStudent);
+         //   intent.putExtra("student",newStudent);
             startActivity(intent);
 
         }

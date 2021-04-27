@@ -16,6 +16,7 @@
 
                 <TextView
                     android:text="@string/edit_profile"
+                    android:id="@+id/teacherEditToolbarTextId"
                     android:textSize="23sp"
                     android:ellipsize="end"
                     android:maxLines="1"

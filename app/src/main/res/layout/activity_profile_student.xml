@@ -173,8 +173,17 @@
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
 
+        <ProgressBar
+            android:layout_centerInParent="true"
+            android:id="@+id/profileStudentProgressId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </ProgressBar>
 
 
     </RelativeLayout>
+
+
 
 </LinearLayout>

@@ -175,17 +175,38 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_marginTop="5dp"
-                        android:layout_gravity="center"
-                        android:id="@+id/studentEditDeptId"
-                        android:text="CSE"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_margin="5dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                    </TextView>
+                        <Button
+                            android:text="Add"
+                            android:id="@+id/editStudentAddDeptId"
+                            android:backgroundTint="@color/small_blue"
+                            android:layout_marginEnd="5sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                        </Button>
+
+                        <TextView
+                            android:layout_gravity="center"
+                            android:id="@+id/studentEditDeptId"
+                            android:text="CSE"
+                            android:layout_marginStart="5dp"
+                            android:textSize="18sp"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                        </TextView>
+
+                    </LinearLayout>
+
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_marginTop="5dp"

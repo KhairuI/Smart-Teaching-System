@@ -149,7 +149,6 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
         if(item.getItemId()==R.id.editId){
 
             Intent intent= new Intent(TeacherHome.this, ProfileTeacher.class);
-            intent.putExtra("teacher",newTeacher);
             startActivity(intent);
 
         }

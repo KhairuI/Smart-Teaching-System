@@ -48,7 +48,7 @@
 
     <string-array name="department">
 
-        <item>CSE</item>
+
         <item>EEE</item>
         <item>BBA</item>
         <item>SWE</item>
@@ -56,6 +56,7 @@
         <item>LAW</item>
         <item> PHARMACY</item>
         <item>NFE</item>
+        <item>CSE</item>
 
 
     </string-array>

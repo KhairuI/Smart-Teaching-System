@@ -34,6 +34,7 @@ public class TeacherHomeViewModel extends ViewModel {
     private MediatorLiveData<Teacher> onTeacherProfileInfo = new MediatorLiveData<>();
     private MediatorLiveData<List<StudentApp>> onTeacher = new MediatorLiveData<>();
     private final MediatorLiveData<StateResource> onTeacherDelete = new MediatorLiveData<>();
+    private final MediatorLiveData<StateResource> onTeacherCounseling = new MediatorLiveData<>();
     private CompositeDisposable disposable = new CompositeDisposable();
 
     @Inject
@@ -41,6 +42,30 @@ public class TeacherHomeViewModel extends ViewModel {
         Log.d(TAG, "TeacherProfileViewModel: is working.....");
         this.firebaseDataRepository= firebaseDataRepository;
         this.authRepository= authRepository;
+    }
+
+    // update counseling....
+    public void updateCounseling(String s){
+
+        firebaseDataRepository.updateCounseling(s).subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread()).subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                disposable.add(d);
+                onTeacherCounseling.setValue(StateResource.loading());
+            }
+
+            @Override
+            public void onComplete() {
+                onTeacherCounseling.setValue(StateResource.success());
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+                onTeacherCounseling.setValue(StateResource.error(e.toString()));
+            }
+        });
     }
 
     // teacher Appointment delete .....
@@ -144,6 +169,11 @@ public class TeacherHomeViewModel extends ViewModel {
 
     public LiveData<StateResource> observeTeacherDelete(){
         return onTeacherDelete;
+    }
+
+    // teacher counseling update observe....
+    public LiveData<StateResource> observeCounseling(){
+        return onTeacherCounseling;
     }
 
 

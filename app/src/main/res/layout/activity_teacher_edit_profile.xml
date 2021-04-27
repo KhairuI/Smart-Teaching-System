@@ -141,6 +141,54 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/enter_office"
+                        app:boxBackgroundMode="outline"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_marginHorizontal="20dp"
+                        app:boxCornerRadiusBottomEnd="5dp"
+                        app:boxCornerRadiusBottomStart="5dp"
+                        app:boxCornerRadiusTopEnd="5dp"
+                        app:boxCornerRadiusTopStart="5dp"
+                        app:endIconMode="clear_text"
+                        android:layout_marginBottom="5dp"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/teacherEditOfficeId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/enter_initial"
+                        app:boxBackgroundMode="outline"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_marginHorizontal="20dp"
+                        app:boxCornerRadiusBottomEnd="5dp"
+                        app:boxCornerRadiusBottomStart="5dp"
+                        app:boxCornerRadiusTopEnd="5dp"
+                        app:boxCornerRadiusTopStart="5dp"
+                        app:endIconMode="clear_text"
+                        android:layout_marginBottom="5dp"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/teacherEditInitialId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
                     <LinearLayout
                         android:padding="10dp"
                         android:layout_gravity="center"
@@ -162,7 +210,7 @@
                         </TextView>
 
                         <Spinner
-                            android:id="@+id/deptEditSpinnerId"
+                            android:id="@+id/deptTeacherEditSpinnerId"
                             android:spinnerMode="dialog"
                             android:entries="@array/department"
                             android:background="@color/small_blue"
@@ -173,17 +221,38 @@
                         </Spinner>
 
                     </LinearLayout>
-                    <TextView
-                        android:layout_marginTop="5dp"
-                        android:layout_gravity="center"
-                        android:id="@+id/teacherEditDeptId"
-                        android:text="CSE"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
-                        android:layout_width="wrap_content"
+
+                    <LinearLayout
+                        android:layout_margin="5dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                    </TextView>
+                        <Button
+                            android:text="Add"
+                            android:id="@+id/editAddDeptId"
+                            android:backgroundTint="@color/small_blue"
+                            android:layout_marginEnd="5sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                        </Button>
+
+                        <TextView
+
+                            android:id="@+id/teacherEditDeptId"
+                            android:text="NFE"
+                            android:layout_marginStart="5dp"
+                            android:textSize="18sp"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                        </TextView>
+
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:padding="10dp"
@@ -206,7 +275,7 @@
                         </TextView>
 
                         <Spinner
-                            android:id="@+id/DesignationEditSpinnerId"
+                            android:id="@+id/DesignationTeacherEditSpinnerId"
                             android:spinnerMode="dialog"
                             android:entries="@array/designation"
                             android:background="@color/small_blue"
@@ -220,17 +289,37 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_marginTop="5dp"
-                        android:layout_gravity="center"
-                        android:id="@+id/teacherEditDesignationId"
-                        android:text="Lecturer"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                    </TextView>
+                        <Button
+                            android:text="Add"
+                            android:id="@+id/editAddDesignationId"
+                            android:backgroundTint="@color/small_blue"
+                            android:layout_marginEnd="5sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                        </Button>
+
+                        <TextView
+                            android:id="@+id/teacherEditDesignationId"
+                            android:layout_marginStart="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Lecturer"
+                            android:textColor="@color/black"
+                            android:textSize="18sp">
+
+                        </TextView>
+
+                    </LinearLayout>
+
 
 
                     <Button
@@ -238,7 +327,7 @@
                         android:textSize="18sp"
                         android:layout_margin="20dp"
                         android:textStyle="bold"
-                        android:id="@+id/teacherEditButtonId"
+                        android:id="@+id/teacherUpdateButtonId"
                         android:textAllCaps="false"
                         android:backgroundTint="@color/small_blue"
                         android:layout_width="match_parent"

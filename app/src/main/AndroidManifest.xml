@@ -25,7 +25,8 @@
         <activity
             android:name=".view.ui.studentAppointment.StudentAppointment"
             android:parentActivityName=".view.ui.teacherList.TeacherList" />
-        <activity android:name=".view.ui.teacherEdit.TeacherEditProfile" />
+        <activity android:name=".view.ui.teacherEdit.TeacherEditProfile"
+            android:parentActivityName=".view.ui.profileTeacher.ProfileTeacher"/>
         <activity android:name=".view.ui.teacherAppointment.TeacherAppointment"
             android:parentActivityName=".view.ui.teacherHome.TeacherHome"/>
 
