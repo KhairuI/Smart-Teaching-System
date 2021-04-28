@@ -2,11 +2,13 @@ package com.example.smartteachingsystem.view.ui.teacherHome;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,7 +45,8 @@ import javax.inject.Inject;
 import dagger.android.support.DaggerAppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAdapter.OnItemClickListener {
+public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAdapter.OnItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
     // declare all views...
     private CircleImageView teacherProfileImage;
     private TextView teacherName, teacherId;
@@ -51,6 +54,7 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
     private ProgressBar progressBar;
     private TeacherHomeViewModel teacherHomeViewModel;
     private Teacher newTeacher;
+    private SwipeRefreshLayout refreshLayout;
     private List<StudentApp> newList= new ArrayList<>();
 
 
@@ -133,7 +137,11 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
         teacherName= findViewById(R.id.teacherProfileNameId);
         teacherId= findViewById(R.id.teacherProfileUniversityId);
         recyclerView= findViewById(R.id.teacherRecycleViewId);
+        SearchView searchView = findViewById(R.id.teacherHomeSearchId);
+        searchView.setOnQueryTextListener(this);
         progressBar= findViewById(R.id.teacherHomeProgressId);
+        refreshLayout= findViewById(R.id.teacherHomeRefreshId);
+        refreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -169,16 +177,6 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
         startActivity(intent);
         finish();
     }
-
-   /* @Override
-    public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-        StudentApp studentApp= documentSnapshot.toObject(StudentApp.class);
-        Intent intent= new Intent(TeacherHome.this,TeacherAppointment.class);
-        intent.putExtra("studentAppointment",studentApp);
-        startActivity(intent);
-        //String name= documentSnapshot.getString("name");
-        //showSnackBar(name);
-    }*/
 
 
     private void showSnackBar(String message) {
@@ -243,5 +241,23 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
                 }
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        newList.clear();
+        teacherHomeViewModel.getStudentAppointment();
+        refreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapter.getFilter().filter(newText);
+        return false;
     }
 }

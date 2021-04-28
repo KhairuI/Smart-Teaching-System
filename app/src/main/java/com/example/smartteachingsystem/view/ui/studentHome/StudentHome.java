@@ -2,11 +2,13 @@ package com.example.smartteachingsystem.view.ui.studentHome;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,15 +52,18 @@ import javax.inject.Inject;
 import dagger.android.support.DaggerAppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class StudentHome extends DaggerAppCompatActivity implements View.OnClickListener,StudentAppAdapter.OnItemClickListener{
+public class StudentHome extends DaggerAppCompatActivity implements View.OnClickListener,StudentAppAdapter.OnItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
     // declare all views...
     private CircleImageView profileImage;
     private TextView profileName, studentId;
     private FloatingActionButton button;
     private ProgressBar progressBar;
+    private SearchView searchView;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
     private List<TeacherApp> newList= new ArrayList<>();
+    private SwipeRefreshLayout refreshLayout;
 
     private Student newStudent;
     private StudentHomeViewModel studentHomeViewModel;
@@ -140,7 +145,11 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
         profileImage= findViewById(R.id.studentProfileImageId);
         profileName= findViewById(R.id.studentProfileNameId);
         progressBar= findViewById(R.id.studentHomeProgressId);
+        searchView= findViewById(R.id.studentHomeSearchId);
+        searchView.setOnQueryTextListener(this);
         studentId= findViewById(R.id.studentProfileUniversityId);
+        refreshLayout= findViewById(R.id.studentHomeRefreshId);
+        refreshLayout.setOnRefreshListener(this);
         recyclerView= findViewById(R.id.studentRecycleViewId);
         button= findViewById(R.id.studentInsertId);
         button.setOnClickListener(this);
@@ -260,5 +269,21 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
     }
 
 
+    @Override
+    public void onRefresh() {
+        newList.clear();
+        studentHomeViewModel.getStudent();
+        refreshLayout.setRefreshing(false);
+    }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapter.getFilter().filter(newText);
+        return false;
+    }
 }

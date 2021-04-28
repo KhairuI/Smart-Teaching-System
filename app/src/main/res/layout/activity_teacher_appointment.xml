@@ -131,6 +131,7 @@
 
                 <TextView
                     android:textColor="@color/green"
+                    android:id="@+id/reasonTitleId"
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center_horizontal"
                     android:textSize="20sp"

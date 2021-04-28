@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,16 +15,18 @@ import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.model.TeacherApp;
+import com.example.smartteachingsystem.view.model.Teacher_List;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TeacherAppAdapter extends RecyclerView.Adapter<TeacherAppAdapter.TeacherViewHolder> {
+public class TeacherAppAdapter extends RecyclerView.Adapter<TeacherAppAdapter.TeacherViewHolder> implements Filterable {
 
     private List<StudentApp> list= new ArrayList<>();
-    private RequestManager requestManager;
+    private List<StudentApp> listSearch= new ArrayList<>();
+    private final RequestManager requestManager;
     private OnItemClickListener listener;
 
     public TeacherAppAdapter(RequestManager requestManager) {
@@ -61,8 +65,45 @@ public class TeacherAppAdapter extends RecyclerView.Adapter<TeacherAppAdapter.Te
 
     public void setList(List<StudentApp> list){
         this.list=list;
+        listSearch= list;
         notifyDataSetChanged();
     }
+
+    @Override
+    public Filter getFilter() {
+        return userFilter;
+    }
+    private final Filter userFilter= new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<StudentApp> filterStudent= new ArrayList<>();
+
+            if(constraint== null || constraint.length()==0){
+                filterStudent.addAll(listSearch);
+            }
+            else {
+
+                String filterPattern= constraint.toString().toLowerCase().trim();
+                for (StudentApp student: listSearch){
+                    if(student.getName().toLowerCase().contains(filterPattern)||student.getId().contains(filterPattern)){
+                        filterStudent.add(student);
+                    }
+                }
+            }
+
+            FilterResults results= new FilterResults();
+            results.values= filterStudent;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            list.clear();
+            list.addAll((List)results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class TeacherViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 

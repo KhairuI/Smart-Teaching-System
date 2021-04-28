@@ -23,25 +23,44 @@
         <TextView
             android:id="@+id/counceling"
             android:layout_marginTop="5dp"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
             android:text="@string/counseling"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
         </TextView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:padding="5dp"
+        <androidx.appcompat.widget.SearchView
             android:layout_below="@id/counceling"
-            android:id="@+id/teacherRecycleViewId"
+            android:background="@drawable/search_view"
+            android:id="@+id/teacherHomeSearchId"
+            android:layout_margin="5dp"
+            app:queryHint="Search by name or id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </androidx.recyclerview.widget.RecyclerView>
+        </androidx.appcompat.widget.SearchView>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_below="@id/teacherHomeSearchId"
+            android:id="@+id/teacherHomeRefreshId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:padding="5dp"
+                android:id="@+id/teacherRecycleViewId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
     </RelativeLayout>
 

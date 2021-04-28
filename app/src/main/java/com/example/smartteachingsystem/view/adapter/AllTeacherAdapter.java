@@ -23,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AllTeacherAdapter extends RecyclerView.Adapter<AllTeacherAdapter.MyViewHolder> implements Filterable {
 
-    private RequestManager requestManager;
+    private final RequestManager requestManager;
     private List<Teacher_List> lists= new ArrayList<>();
     private List<Teacher_List> listSearch= new ArrayList<>();
     private OnItemClickListener listener;
@@ -101,8 +101,11 @@ public class AllTeacherAdapter extends RecyclerView.Adapter<AllTeacherAdapter.My
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView name, initial, dept,email;
-        private CircleImageView image;
+        private final TextView name;
+        private final TextView initial;
+        private final TextView dept;
+        private final TextView email;
+        private final CircleImageView image;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

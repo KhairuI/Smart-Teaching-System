@@ -3,6 +3,8 @@ package com.example.smartteachingsystem.view.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,10 +19,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TeacherAdapter extends FirestoreRecyclerAdapter<Teacher_List,TeacherAdapter.TeacherViewHolder> {
+public class TeacherAdapter extends FirestoreRecyclerAdapter<Teacher_List,TeacherAdapter.TeacherViewHolder> implements Filterable {
 
     private OnItemClickListener listener;
-    private RequestManager requestManager;
+    private final RequestManager requestManager;
 
     public TeacherAdapter(@NonNull FirestoreRecyclerOptions<Teacher_List> options,RequestManager requestManager) {
         super(options);
@@ -46,11 +48,19 @@ public class TeacherAdapter extends FirestoreRecyclerAdapter<Teacher_List,Teache
         return new TeacherViewHolder(view);
     }
 
+    @Override
+    public Filter getFilter() {
+        return null;
+    }
+
 
     public class TeacherViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView name, initial, dept,email;
-        private CircleImageView image;
+        private final TextView name;
+        private final TextView initial;
+        private final TextView dept;
+        private final TextView email;
+        private final CircleImageView image;
 
         public TeacherViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -126,6 +126,7 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
                             showSnackBar("Submit Successfully");
                             appointmentViewModel.getToken(list.getuId());
                             tokenObserver();
+                            finish();
                             //goToStudentProfile();
                             break;
                         case ERROR:

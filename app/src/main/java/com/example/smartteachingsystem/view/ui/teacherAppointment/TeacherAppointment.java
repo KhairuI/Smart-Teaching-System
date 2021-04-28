@@ -37,7 +37,7 @@ import retrofit2.Callback;
 
 public class TeacherAppointment extends DaggerAppCompatActivity implements View.OnClickListener {
     private Toolbar toolbar;
-    private TextView name,id,email,dept,phone,counseling,status;
+    private TextView name,id,email,dept,phone,counseling,status,reason;
     private ProgressBar progressBar;
     private TextInputEditText editText;
     private Button approve, decline;
@@ -115,6 +115,7 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
                             showSnackBar("Response Successfully");
                             viewModel.getToken(studentApp.getuId());
                             observeToken();
+                            finish();
                             break;
                         case ERROR:
                             progressBar.setVisibility(View.INVISIBLE);
@@ -133,12 +134,14 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
             status.setTextColor(Color.RED);
         }
         else if(studentApp.getStatus().equals("Approve")){
+            reason.setText("Your response");
             status.setText("Already "+studentApp.getStatus());
             status.setTextColor(Color.GREEN);
             approve.setEnabled(false);
             decline.setEnabled(false);
         }
         else if(studentApp.getStatus().equals("Decline")){
+            reason.setText("Your response");
             status.setText("Already "+studentApp.getStatus());
             status.setTextColor(Color.RED);
             approve.setEnabled(false);
@@ -165,6 +168,7 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
         imageView= findViewById(R.id.teacherAppointmentImageId);
         email= findViewById(R.id.teacherAppointmentEmailId);
         dept= findViewById(R.id.teacherAppointmentDeptId);
+        reason= findViewById(R.id.reasonTitleId);
         progressBar= findViewById(R.id.teacherAppointmentProgressId);
         progressBar.setVisibility(View.GONE);
         phone= findViewById(R.id.teacherAppointmentMobileId);

@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,7 +35,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class TeacherList extends DaggerAppCompatActivity implements AllTeacherAdapter.OnItemClickListener {
+public class TeacherList extends DaggerAppCompatActivity implements AllTeacherAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     // Declare all views..
     private RecyclerView teacherList;
     private Toolbar toolbar;
@@ -42,6 +43,7 @@ public class TeacherList extends DaggerAppCompatActivity implements AllTeacherAd
   //  private TeacherAdapter teacherAdapter;
     private TeacherListViewModel teacherListViewModel;
     private List<Teacher_List> newList= new ArrayList<>();
+    private SwipeRefreshLayout refreshLayout;
 
     // Dependency Injection
    /* @Inject
@@ -70,7 +72,7 @@ public class TeacherList extends DaggerAppCompatActivity implements AllTeacherAd
             public void onChanged(List<Teacher_List> list) {
                 newList= list;
                 progressBar.setVisibility(View.GONE);
-                adapter.setList(list);
+                adapter.setList(newList);
 
             }
         });
@@ -114,6 +116,8 @@ public class TeacherList extends DaggerAppCompatActivity implements AllTeacherAd
 
         teacherList= findViewById(R.id.teacherListRecycleId);
         progressBar= findViewById(R.id.allTeacherProgressId);
+        refreshLayout= findViewById(R.id.refreshId);
+        refreshLayout.setOnRefreshListener(this);
 
     }
 
@@ -131,4 +135,12 @@ public class TeacherList extends DaggerAppCompatActivity implements AllTeacherAd
         startActivity(intent);
     }
 
+    @Override
+    public void onRefresh() {
+        newList.clear();
+        teacherListViewModel.getTeacher();
+        refreshLayout.setRefreshing(false);
+
+
+    }
 }
