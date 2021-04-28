@@ -53,7 +53,7 @@
                         >
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/loginEmailEditTextId"
+                            android:id="@+id/noteDialogueName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textEmailAddress"

@@ -45,6 +45,15 @@
     <string name="topics">Counseling topics</string>
     <string name="enter_topics">* Write here</string>
     <string name="make_appointment">Make Appointment</string>
+    <string name="logout">Logout</string>
+    <string name="profile">Profile</string>
+    <string name="about">About</string>
+    <string name="note_list">Note List</string>
+    <string name="name">Name</string>
+    <string name="date">Date</string>
+    <string name="note">Note</string>
+    <string name="search">Search</string>
+    <string name="empty">No data found</string>
 
     <string-array name="department">
 

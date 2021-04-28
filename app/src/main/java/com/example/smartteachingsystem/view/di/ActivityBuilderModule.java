@@ -19,6 +19,8 @@ import com.example.smartteachingsystem.view.di.teacherHome.TeacherHomeModule;
 import com.example.smartteachingsystem.view.di.teacherList.TeacherListModule;
 import com.example.smartteachingsystem.view.di.teacherList.TeacherListViewModelModule;
 import com.example.smartteachingsystem.view.di.teacherHome.TeacherHomeViewModelModule;
+import com.example.smartteachingsystem.view.di.teacherNote.TeacherNoteModule;
+import com.example.smartteachingsystem.view.di.teacherNote.TeacherNoteViewModelModule;
 import com.example.smartteachingsystem.view.di.teacherRegister.TeacherRegViewModelModule;
 import com.example.smartteachingsystem.view.ui.profileStudent.ProfileStudent;
 import com.example.smartteachingsystem.view.ui.profileTeacher.ProfileTeacher;
@@ -34,6 +36,7 @@ import com.example.smartteachingsystem.view.ui.teacherAppointment.TeacherAppoint
 import com.example.smartteachingsystem.view.ui.teacherEdit.TeacherEditProfile;
 import com.example.smartteachingsystem.view.ui.teacherList.TeacherList;
 import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHome;
+import com.example.smartteachingsystem.view.ui.teacherNote.TeacherNote;
 import com.example.smartteachingsystem.view.ui.teacherRegister.TeacherRegister;
 
 import dagger.Module;
@@ -172,6 +175,16 @@ public abstract class ActivityBuilderModule {
             }
     )
     abstract TeacherEditProfile contributeTeacherEditProfile();
+
+    // Teacher Note list Activity
+
+    @ContributesAndroidInjector(
+            modules = {
+                    TeacherNoteViewModelModule.class,
+                    TeacherNoteModule.class
+            }
+    )
+    abstract TeacherNote contributeTeacherNote();
 
 
 }

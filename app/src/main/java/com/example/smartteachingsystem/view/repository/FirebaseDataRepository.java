@@ -3,6 +3,7 @@ package com.example.smartteachingsystem.view.repository;
 import android.graphics.Bitmap;
 
 import com.example.smartteachingsystem.view.dataSource.FirebaseDataSource;
+import com.example.smartteachingsystem.view.model.Note;
 import com.example.smartteachingsystem.view.model.Response;
 import com.example.smartteachingsystem.view.model.Student;
 import com.example.smartteachingsystem.view.model.StudentApp;
@@ -27,6 +28,19 @@ public class FirebaseDataRepository {
      @Inject
     public FirebaseDataRepository(FirebaseDataSource firebaseDataSource) {
         this.firebaseDataSource = firebaseDataSource;
+    }
+
+    // delete note....
+    public Completable noteDelete(String pushKey){
+         return firebaseDataSource.noteDelete(pushKey);
+    }
+    // insert note......
+    public Completable insertNote(Note note){
+         return firebaseDataSource.insertNote(note);
+    }
+    // get all note
+    public Flowable<List<Note> > getAllNote(){
+         return firebaseDataSource.getAllNote();
     }
 
     // update teacher counseling...

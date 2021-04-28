@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/mainLayout"
+        android:layout_margin="7dp"
+        android:padding="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/name"
+            android:id="@+id/singleNoteNameId"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+        <TextView
+            android:text="@string/note"
+            android:layout_below="@id/singleNoteNameId"
+            android:id="@+id/singleNoteId"
+            android:textColor="@color/black"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/singleNoteDateId"
+            android:textSize="16sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+        <TextView
+            android:text="@string/date"
+            android:layout_below="@id/singleNoteNameId"
+            android:id="@+id/singleNoteDateId"
+            android:textColor="@color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="5dp"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_below="@id/mainLayout"
+        android:background="@color/normal_small_blue"
+        android:layout_width="match_parent"
+        android:layout_height="1dp">
+
+    </View>
+
+
+
+</RelativeLayout>

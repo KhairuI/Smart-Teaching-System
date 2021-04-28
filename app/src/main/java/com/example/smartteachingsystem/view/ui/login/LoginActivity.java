@@ -185,7 +185,7 @@ public class LoginActivity extends DaggerAppCompatActivity implements View.OnCli
     private void findSection() {
         loginProgressBar= findViewById(R.id.loginProgressId);
         loginProgressBar.setVisibility(View.GONE);
-        loginEmail= findViewById(R.id.loginEmailEditTextId);
+        loginEmail= findViewById(R.id.noteDialogueName);
         loginPassword= findViewById(R.id.loginPasswordEditTextId);
         loginButton= findViewById(R.id.loginButtonId);
         loginButton.setOnClickListener(this);

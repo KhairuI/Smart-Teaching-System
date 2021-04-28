@@ -23,9 +23,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class LoginViewModel extends ViewModel {
 
     private static final String TAG = "LoginViewModel";
-    private AuthRepository authRepository;
-    private MediatorLiveData<StateResource> onLogin = new MediatorLiveData<>();
-    private CompositeDisposable disposable = new CompositeDisposable();
+    private final AuthRepository authRepository;
+    private final MediatorLiveData<StateResource> onLogin = new MediatorLiveData<>();
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     @Inject
     public LoginViewModel(AuthRepository authRepository) {

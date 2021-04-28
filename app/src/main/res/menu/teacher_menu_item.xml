@@ -4,15 +4,19 @@
 
     <item
         android:title="@string/profile"
-        android:id="@+id/editId"
+        android:id="@+id/teacherEditId"
+        app:showAsAction="never" />
+    <item
+        android:title="@string/note_list"
+        android:id="@+id/teacherNoteId"
         app:showAsAction="never" />
 
     <item
         android:title="@string/logout"
-        android:id="@+id/logoutId"
+        android:id="@+id/teacherLogoutId"
         app:showAsAction="never" />
     <item
         android:title="@string/about"
-        android:id="@+id/aboutId"
+        android:id="@+id/teacherAboutId"
         app:showAsAction="never" />
 </menu>

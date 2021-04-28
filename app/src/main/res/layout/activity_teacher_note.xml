@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.ui.teacherNote.TeacherNote">
+
+    <RelativeLayout
+        android:id="@+id/topToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/note_list_toolbar" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+
+        android:layout_below="@id/topToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/noteRefreshId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/noteListRecycleId"
+                android:padding="1dp"
+                tools:listitem="@layout/note_single_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/noteProgressId"
+        android:layout_centerInParent="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp">
+
+    </ProgressBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:src="@drawable/ic_insert"
+        android:id="@+id/noteInsertId"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20sp"
+        android:clickable="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    <TextView
+        android:text="@string/empty"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:id="@+id/noteEmptyId"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+
+
+</RelativeLayout>

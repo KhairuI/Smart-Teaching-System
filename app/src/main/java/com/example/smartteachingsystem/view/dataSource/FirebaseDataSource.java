@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+import com.example.smartteachingsystem.view.model.Note;
 import com.example.smartteachingsystem.view.model.Response;
 import com.example.smartteachingsystem.view.model.Student;
 import com.example.smartteachingsystem.view.model.StudentApp;
@@ -62,6 +63,66 @@ public class FirebaseDataSource {
         this.storageReference = storageReference;
         currentUid= firebaseAuthSource.getCurrentUid();
     }
+
+    // added teacher Note......
+    public Completable insertNote(Note note){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+                final DocumentReference db_reference= fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid)
+                        .collection("note").document(note.getPushKey());
+
+                // make note map
+                Map<String,String> noteMap= new HashMap<>();
+                noteMap.put("pushKey",note.getPushKey());
+                noteMap.put("date",note.getDate());
+                noteMap.put("name",note.getName());
+                noteMap.put("noteText",note.getNoteText());
+                db_reference.set(noteMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        emitter.onComplete();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+
+            }
+        });
+    }
+
+    // get all teacher  note here.....
+    public Flowable<List<Note> > getAllNote(){
+        final List<Note> noteList= new ArrayList<>();
+
+        return Flowable.create(new FlowableOnSubscribe<List<Note>>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<List<Note>> emitter) throws Throwable {
+                fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid).collection("note").get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@androidx.annotation.NonNull Task<QuerySnapshot> task) {
+                                noteList.clear();
+                                for(DocumentSnapshot dc:task.getResult()){
+
+                                    Note note= dc.toObject(Note.class);
+                                    noteList.add(note);
+                                }
+                                emitter.onNext(noteList);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        },BackpressureStrategy.BUFFER);
+    }
+
 
     // update teacher counseling...
     public Completable updateCounseling(String s){
@@ -953,6 +1014,31 @@ public class FirebaseDataSource {
             }
         });
     }
+
+    // teacher note delete....
+
+    public Completable noteDelete(String pushKey){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+
+                final DocumentReference teacher_reference= fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid)
+                        .collection("note").document(pushKey);
+                teacher_reference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        emitter.onComplete();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        });
+    }
+
 
     // teacher appointment delete......
 

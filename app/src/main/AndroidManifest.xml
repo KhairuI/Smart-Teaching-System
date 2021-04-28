@@ -16,26 +16,30 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartTeachingSystem">
-        <activity android:name=".view.ui.profileTeacher.ProfileTeacher"
+        <activity android:name=".view.ui.teacherNote.TeacherNote"
             android:parentActivityName=".view.ui.teacherHome.TeacherHome"/>
-
+        <activity
+            android:name=".view.ui.profileTeacher.ProfileTeacher"
+            android:parentActivityName=".view.ui.teacherHome.TeacherHome" />
         <activity
             android:name=".view.ui.profileStudent.ProfileStudent"
             android:parentActivityName=".view.ui.studentHome.StudentHome" />
         <activity
             android:name=".view.ui.studentAppointment.StudentAppointment"
             android:parentActivityName=".view.ui.teacherList.TeacherList" />
-        <activity android:name=".view.ui.teacherEdit.TeacherEditProfile"
-            android:parentActivityName=".view.ui.profileTeacher.ProfileTeacher"/>
-        <activity android:name=".view.ui.teacherAppointment.TeacherAppointment"
-            android:parentActivityName=".view.ui.teacherHome.TeacherHome"/>
-
+        <activity
+            android:name=".view.ui.teacherEdit.TeacherEditProfile"
+            android:parentActivityName=".view.ui.profileTeacher.ProfileTeacher" />
+        <activity
+            android:name=".view.ui.teacherAppointment.TeacherAppointment"
+            android:parentActivityName=".view.ui.teacherHome.TeacherHome" />
         <activity android:name=".view.ui.teacherHome.TeacherHome" />
         <activity
             android:name=".view.ui.teacherList.TeacherList"
             android:parentActivityName=".view.ui.studentHome.StudentHome" />
-        <activity android:name=".view.ui.studentEdit.StudentEditProfile"
-            android:parentActivityName=".view.ui.profileStudent.ProfileStudent"/>
+        <activity
+            android:name=".view.ui.studentEdit.StudentEditProfile"
+            android:parentActivityName=".view.ui.profileStudent.ProfileStudent" />
         <activity android:name=".view.ui.studentHome.StudentHome" />
         <activity android:name=".view.ui.teacherRegister.TeacherRegister" />
         <activity android:name=".view.ui.studentRegister.StudentRegister" />
@@ -63,7 +67,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service
             android:name=".view.notification.MyFirebaseIdService"
             android:enabled="true"

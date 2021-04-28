@@ -30,6 +30,7 @@ import com.example.smartteachingsystem.view.model.TeacherApp;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
 import com.example.smartteachingsystem.view.ui.profileTeacher.ProfileTeacher;
 import com.example.smartteachingsystem.view.ui.teacherAppointment.TeacherAppointment;
+import com.example.smartteachingsystem.view.ui.teacherNote.TeacherNote;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
@@ -147,25 +148,30 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater= getMenuInflater();
-        menuInflater.inflate(R.menu.menu_item,menu);
+        menuInflater.inflate(R.menu.teacher_menu_item,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.editId){
+        if(item.getItemId()==R.id.teacherEditId){
 
             Intent intent= new Intent(TeacherHome.this, ProfileTeacher.class);
             startActivity(intent);
 
         }
-        else if(item.getItemId()==R.id.logoutId){
+        else if(item.getItemId()==R.id.teacherLogoutId){
             teacherHomeViewModel.logout();
             goToLoginActivity();
         }
-        else if(item.getItemId()==R.id.aboutId){
+        else if(item.getItemId()==R.id.teacherAboutId){
             showSnackBar("About");
+
+        }
+        else if(item.getItemId()==R.id.teacherNoteId){
+            Intent intent = new Intent(TeacherHome.this, TeacherNote.class);
+            startActivity(intent);
 
         }
         return super.onOptionsItemSelected(item);
