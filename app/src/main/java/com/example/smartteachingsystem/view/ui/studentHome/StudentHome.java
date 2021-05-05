@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +30,9 @@ import com.example.smartteachingsystem.view.model.TeacherApp;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
 import com.example.smartteachingsystem.view.ui.profileStudent.ProfileStudent;
 import com.example.smartteachingsystem.view.ui.teacherList.TeacherList;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.DetailsDialogue;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.Resource;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
@@ -167,18 +170,41 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if(item.getItemId()==R.id.editId){
-            Intent intent= new Intent(StudentHome.this, ProfileStudent.class);
-         //   intent.putExtra("student",newStudent);
-            startActivity(intent);
+            boolean isConnect= Check();
+            if(isConnect){
+                Intent intent= new Intent(StudentHome.this, ProfileStudent.class);
+                startActivity(intent);
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
+
 
         }
         else if(item.getItemId()==R.id.logoutId){
-            studentHomeViewModel.logout();
-            goToLoginActivity();
+            boolean isConnect= Check();
+            if(isConnect){
+                studentHomeViewModel.logout();
+                goToLoginActivity();
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
+
 
         }
         else if(item.getItemId()==R.id.aboutId){
-          showSnackBar("About");
+            AlertDialog.Builder builder= new AlertDialog.Builder(this);
+            LayoutInflater inflater= getLayoutInflater();
+            final View view= inflater.inflate(R.layout.about_dialogue,null);
+            builder.setView(view).setTitle("About").setCancelable(true).setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            }).create().show();
 
         }
         return super.onOptionsItemSelected(item);
@@ -192,8 +218,15 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.studentInsertId){
-            Intent intent= new Intent(StudentHome.this, TeacherList.class);
-            startActivity(intent);
+            boolean isConnect= Check();
+            if(isConnect){
+                Intent intent= new Intent(StudentHome.this, TeacherList.class);
+                startActivity(intent);
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
         }
     }
     private void goToLoginActivity() {
@@ -225,14 +258,23 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
         }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               String value= newList.get(position).getStatus();
-               if(value.equals("Pending")){
-                   showSnackBar("Pending appointment can not deleted");
-               }
-               else {
-                   studentHomeViewModel.studentDelete(key);
-                   observeDelete(position);
-               }
+                boolean isConnect= Check();
+                if(isConnect){
+                    String value= newList.get(position).getStatus();
+                    if(value.equals("Pending")){
+                        showSnackBar("Pending appointment can not deleted");
+                    }
+                    else {
+                        studentHomeViewModel.studentDelete(key);
+                        observeDelete(position);
+                    }
+                }
+                else{
+                    NoInternetDialogue dialogue= new NoInternetDialogue();
+                    dialogue.show(getSupportFragmentManager(),"no_internet");
+                }
+
+
 
             }
         }).create().show();
@@ -286,4 +328,11 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
         adapter.getFilter().filter(newText);
         return false;
     }
+
+
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
+    }
+
 }

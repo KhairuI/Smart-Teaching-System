@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.repository.AuthRepository;
 import com.example.smartteachingsystem.view.ui.register.RegisterActivity;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.ui.account.AccountActivity;
@@ -67,13 +69,26 @@ public class LoginActivity extends DaggerAppCompatActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.loginButtonId){
-            setLogin();
+            boolean isConnect = Check();
+            if(isConnect){
+                setLogin();
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
+
         }
         else if(view.getId()==R.id.loginToolbarTextId){
             goToAccountActivity();
         }
 
     }
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
+    }
+
 
 
     private void loginObserve() {

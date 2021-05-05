@@ -52,6 +52,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/teacherAppEmailId"
                         android:src="@drawable/ic_email"
                         android:layout_width="35dp"
                         android:layout_height="35dp">
@@ -102,6 +103,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/teacherAppCallId"
                         android:src="@drawable/ic_phone"
                         android:layout_width="35dp"
                         android:layout_height="35dp">

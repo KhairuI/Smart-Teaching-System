@@ -17,6 +17,8 @@ import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
 import com.example.smartteachingsystem.view.ui.login.LoginViewModel;
 import com.example.smartteachingsystem.view.ui.register.RegisterActivity;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
@@ -58,6 +60,11 @@ public class AccountActivity extends DaggerAppCompatActivity implements View.OnC
 
         loginObserve();
 
+    }
+
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
     }
 
     private void loginObserve() {
@@ -156,9 +163,17 @@ public class AccountActivity extends DaggerAppCompatActivity implements View.OnC
             goToLoginActivity();
         }
         else if(view.getId()==R.id.createAccountButtonId){
-            setRegistration();
+            boolean isConnect = Check();
+            if(isConnect){
+                setRegistration();
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
         }
         else if(view.getId()==R.id.loginNowButtonId){
+
             goToLoginActivity();
         }
     }

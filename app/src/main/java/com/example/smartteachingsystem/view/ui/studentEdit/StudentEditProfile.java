@@ -32,7 +32,9 @@ import com.example.smartteachingsystem.view.ui.profileStudent.ProfileStudent;
 import com.example.smartteachingsystem.view.ui.profileStudent.ProfileStudentViewModel;
 import com.example.smartteachingsystem.view.ui.profileTeacher.ProfileTeacher;
 import com.example.smartteachingsystem.view.ui.teacherEdit.TeacherEditProfile;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.DataConverter;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
@@ -60,12 +62,10 @@ public class StudentEditProfile extends DaggerAppCompatActivity implements View.
     private TextView studentEditDept,toolbarText;
     private CircleImageView studentEditImage;
     private TextInputEditText studentEditName,studentEditId,studentEditEmail,studentEditMobile,studentEditSection;
-    private Button studentEditUpdateButton,addDeptButton;
+    private Button studentEditUpdateButton;
     private ProgressBar studentEditProgress;
     private Student student;
     private StudentEditViewModel viewModel;
-    private Toolbar toolbar;
-    private Uri insertImageUri= null;
     private Bitmap bitmap;
 
     //Rx variable
@@ -207,7 +207,7 @@ public class StudentEditProfile extends DaggerAppCompatActivity implements View.
 
     private void findSection() {
         // set toolbar
-        toolbar= findViewById(R.id.studentEditProfileToolbarId);
+        Toolbar toolbar = findViewById(R.id.studentEditProfileToolbarId);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -223,11 +223,16 @@ public class StudentEditProfile extends DaggerAppCompatActivity implements View.
         studentEditUpdateButton= findViewById(R.id.studentEditUpdateButtonId);
         studentEditProgress= findViewById(R.id.studentEditProgressId);
         studentEditProgress.setVisibility(View.GONE);
-        addDeptButton= findViewById(R.id.editStudentAddDeptId);
+        Button addDeptButton = findViewById(R.id.editStudentAddDeptId);
 
         studentEditUpdateButton.setOnClickListener(this);
         addDeptButton.setOnClickListener(this);
         studentEditImage.setOnClickListener(this);
+    }
+
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
     }
 
     @Override
@@ -238,19 +243,29 @@ public class StudentEditProfile extends DaggerAppCompatActivity implements View.
         }
         else if(view.getId()==R.id.studentEditUpdateButtonId){
 
-            String name= studentEditName.getText().toString();
-            String id= studentEditId.getText().toString();
-            String email= studentEditEmail.getText().toString();
-            String phone= studentEditMobile.getText().toString();
-            String dept= studentEditDept.getText().toString();
-            String section= studentEditSection.getText().toString();
-            Student student= new Student(name,id,email,phone,dept,section,"image");
-            if(bitmap==null){
-                viewModel.updateWithoutImage(student);
+            boolean isConnect= Check();
+            if(isConnect){
+
+                String name= studentEditName.getText().toString();
+                String id= studentEditId.getText().toString();
+                String email= studentEditEmail.getText().toString();
+                String phone= studentEditMobile.getText().toString();
+                String dept= studentEditDept.getText().toString();
+                String section= studentEditSection.getText().toString();
+                Student student= new Student(name,id,email,phone,dept,section,"image");
+                if(bitmap==null){
+                    viewModel.updateWithoutImage(student);
+                }
+                else {
+                    viewModel.updateWithImage(student,bitmap);
+                }
             }
             else {
-                viewModel.updateWithImage(student,bitmap);
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
             }
+
+
 
         }
         else if(view.getId()==R.id.studentEditImageId){
@@ -290,8 +305,8 @@ public class StudentEditProfile extends DaggerAppCompatActivity implements View.
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if(resultCode==RESULT_OK){
                 assert result != null;
-                insertImageUri= result.getUri();
-                if(insertImageUri!= null){
+                Uri insertImageUri = result.getUri();
+                if(insertImageUri != null){
                     studentEditImage.setImageURI(insertImageUri);
                     convertToByte(insertImageUri);
                 }

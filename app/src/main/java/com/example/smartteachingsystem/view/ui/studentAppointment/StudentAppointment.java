@@ -5,10 +5,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,6 +25,8 @@ import com.example.smartteachingsystem.view.notification.Data;
 import com.example.smartteachingsystem.view.notification.MyResponse;
 import com.example.smartteachingsystem.view.notification.NotificationSender;
 import com.example.smartteachingsystem.view.ui.studentRegister.StudentRegisterViewModel;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
@@ -44,12 +49,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class StudentAppointment extends DaggerAppCompatActivity implements View.OnClickListener {
-    private Toolbar toolbar;
     private CircleImageView image;
     private TextView name,id,initial,email,department, phone,office,counseling;
     private TextInputEditText editText;
     private ProgressBar progressBar;
-    private Button button;
     private Teacher_List list;
     private StudentAppointmentViewModel appointmentViewModel;
 
@@ -154,7 +157,7 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
     }
 
     private void findSection() {
-        toolbar= findViewById(R.id.studentAppointmentToolbarId);
+        Toolbar toolbar = findViewById(R.id.studentAppointmentToolbarId);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -170,9 +173,19 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
         progressBar= findViewById(R.id.studentAppointmentProgressId);
         progressBar.setVisibility(View.GONE);
         editText= findViewById(R.id.studentAppointmentTopicsId);
-        button= findViewById(R.id.studentAppointmentButtonId);
+        Button button = findViewById(R.id.studentAppointmentButtonId);
         button.setOnClickListener(this);
 
+        ImageView call= findViewById(R.id.studentAppPhoneId);
+        call.setOnClickListener(this);
+        ImageView sentEmail= findViewById(R.id.studentAppEmailId);
+        sentEmail.setOnClickListener(this);
+
+    }
+
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
     }
 
     @Override
@@ -182,31 +195,54 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
                 editText.setError("Enter appointment topic");
             }
             else {
-                String message= editText.getText().toString();
-                String status= "Pending";
-                String name= list.getName();
-                String id= list.getId();
-                String uId= list.getuId();
-                String pushKey= randomDigit();
-                String email= list.getEmail();
-                String dept= list.getDepartment();
-                String image= list.getImage();
-                String office= list.getOffice();
-                String initial= list.getInitial();
-                String designation= list.getDesignation();
-                String phone= list.getPhone();
+                boolean isConnect= Check();
+                if(isConnect){
 
-                TeacherApp teacher= new TeacherApp(status,message,name,id,uId,pushKey,email,dept,image,office,initial,designation,phone);
-                appointmentViewModel.setStudentAppointment(teacher);
+                    String message= editText.getText().toString();
+                    String status= "Pending";
+                    String name= list.getName();
+                    String id= list.getId();
+                    String uId= list.getuId();
+                    String pushKey= randomDigit();
+                    String email= list.getEmail();
+                    String dept= list.getDepartment();
+                    String image= list.getImage();
+                    String office= list.getOffice();
+                    String initial= list.getInitial();
+                    String designation= list.getDesignation();
+                    String phone= list.getPhone();
+
+                    TeacherApp teacher= new TeacherApp(status,message,name,id,uId,pushKey,email,dept,image,office,initial,designation,phone);
+                    appointmentViewModel.setStudentAppointment(teacher);
+                }
+                else {
+                    NoInternetDialogue dialogue= new NoInternetDialogue();
+                    dialogue.show(getSupportFragmentManager(),"no_internet");
+                }
+
             }
 
+        }
+        else if(view.getId()==R.id.studentAppPhoneId){
+            String number= "tel:"+phone.getText().toString();
+            Intent intent= new Intent(Intent.ACTION_DIAL, Uri.parse(number));
+            startActivity(intent);
+
+        }
+        else if(view.getId()==R.id.studentAppEmailId){
+
+            String to= email.getText().toString();
+            String[] makeTo= to.split(",");
+            Intent intent= new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_EMAIL,makeTo);
+            intent.putExtra(Intent.EXTRA_SUBJECT,"Request for Appointment");
+            intent.putExtra(Intent.EXTRA_TEXT,"Sir/Madam I need your appointment for ...");
+            intent.setType("message/rfc822");
+            startActivity(Intent.createChooser(intent,"Choose an email client"));
         }
 
     }
 
-    private void makeData(String value) {
-
-    }
 
     //generate a random digit.........
     private String randomDigit() {

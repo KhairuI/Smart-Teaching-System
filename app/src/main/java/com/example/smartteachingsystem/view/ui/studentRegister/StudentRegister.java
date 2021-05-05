@@ -27,7 +27,9 @@ import android.widget.TextView;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.model.Student;
 import com.example.smartteachingsystem.view.ui.studentHome.StudentHome;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.DataConverter;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
@@ -102,6 +104,11 @@ public class StudentRegister extends DaggerAppCompatActivity implements View.OnC
                 }
             }
         });
+    }
+
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
     }
 
     private void goToStudentProfile() {
@@ -215,7 +222,15 @@ public class StudentRegister extends DaggerAppCompatActivity implements View.OnC
     public void onClick(View view) {
         if(view.getId()==R.id.studentRegisterButtonId){
             if(bitmap != null){
-                sentData();
+                boolean isConnect = Check();
+                if(isConnect){
+                    sentData();
+                }
+                else {
+                    NoInternetDialogue dialogue= new NoInternetDialogue();
+                    dialogue.show(getSupportFragmentManager(),"no_internet");
+                }
+
             }
             else {
                 showSnackBar("Please upload image");

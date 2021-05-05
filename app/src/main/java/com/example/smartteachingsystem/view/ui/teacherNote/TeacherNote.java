@@ -26,6 +26,8 @@ import com.example.smartteachingsystem.view.adapter.NoteAdapter;
 import com.example.smartteachingsystem.view.model.Note;
 import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHomeViewModel;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -44,12 +46,11 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 public class TeacherNote extends DaggerAppCompatActivity implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener,NoteAdapter.OnItemClickListener {
-    private TextView toolbarText,empty,name,date,text;
+    private TextView empty;
     private RecyclerView recyclerView;
     private TextInputEditText noteName,noteText;
     private SwipeRefreshLayout refreshLayout;
     private ProgressBar progressBar;
-    private Toolbar toolbar;
     private TeacherNoteViewModel viewModel;
     private List<Note> newList= new ArrayList<>();
 
@@ -85,6 +86,10 @@ public class TeacherNote extends DaggerAppCompatActivity implements View.OnClick
         });
     }
 
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
+    }
 
     private void observeInsert() {
         viewModel.observeSave().observe(this, new Observer<StateResource>() {
@@ -129,7 +134,7 @@ public class TeacherNote extends DaggerAppCompatActivity implements View.OnClick
     }
 
     private void findSection() {
-        toolbar= findViewById(R.id.noteListToolbarId);
+        Toolbar toolbar = findViewById(R.id.noteListToolbarId);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -137,7 +142,7 @@ public class TeacherNote extends DaggerAppCompatActivity implements View.OnClick
         refreshLayout= findViewById(R.id.noteRefreshId);
         refreshLayout.setOnRefreshListener(this);
         empty= findViewById(R.id.noteEmptyId);
-        toolbarText= findViewById(R.id.noteToolbarTextId);
+        TextView toolbarText = findViewById(R.id.noteToolbarTextId);
         toolbarText.setText("Note List");
         FloatingActionButton add = findViewById(R.id.noteInsertId);
         add.setOnClickListener(this);
@@ -148,7 +153,15 @@ public class TeacherNote extends DaggerAppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.noteInsertId){
-            openDialogue();
+            boolean isConnect= Check();
+            if(isConnect){
+                openDialogue();
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
+
         }
     }
 
@@ -242,9 +255,9 @@ public class TeacherNote extends DaggerAppCompatActivity implements View.OnClick
             }
         });
 
-        name= view.findViewById(R.id.noteViewNameId);
-        date= view.findViewById(R.id.noteViewDateId);
-        text= view.findViewById(R.id.noteViewTextId);
+        TextView name = view.findViewById(R.id.noteViewNameId);
+        TextView date = view.findViewById(R.id.noteViewDateId);
+        TextView text = view.findViewById(R.id.noteViewTextId);
         name.setText(newList.get(position).getName());
         date.setText(newList.get(position).getDate());
         text.setText(newList.get(position).getNoteText());

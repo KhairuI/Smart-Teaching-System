@@ -31,7 +31,9 @@ import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.model.Teacher;
 import com.example.smartteachingsystem.view.ui.profileTeacher.ProfileTeacher;
 import com.example.smartteachingsystem.view.ui.studentEdit.StudentEditViewModel;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.DataConverter;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
@@ -59,10 +61,8 @@ public class TeacherEditProfile extends DaggerAppCompatActivity implements View.
     private TextInputEditText teacherName,teacherId,teacherEmail,teacherMobile,teacherOffice,teacherInitial;
     private Spinner deptSpinner,designationSpinner;
     private TextView teacherEditDept,teacherEditDesignation,toolbarText;
-    private Button teacherUpdateButton,addDept,addDesignation;
+    private Button teacherUpdateButton;
     private ProgressBar teacherProgress;
-    private Toolbar toolbar;
-    private Uri insertImageUri= null;
     private Bitmap bitmap;
     private Teacher teacher;
     //Rx variable
@@ -153,7 +153,7 @@ public class TeacherEditProfile extends DaggerAppCompatActivity implements View.
     }
 
     private void findSection() {
-        toolbar= findViewById(R.id.teacherEditProfileToolbarId);
+        Toolbar toolbar = findViewById(R.id.teacherEditProfileToolbarId);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -172,8 +172,8 @@ public class TeacherEditProfile extends DaggerAppCompatActivity implements View.
         teacherProgress= findViewById(R.id.teacherEditProgressId);
         teacherProgress.setVisibility(View.GONE);
         toolbarText= findViewById(R.id.teacherEditToolbarTextId);
-        addDept= findViewById(R.id.editAddDeptId);
-        addDesignation= findViewById(R.id.editAddDesignationId);
+        Button addDept = findViewById(R.id.editAddDeptId);
+        Button addDesignation = findViewById(R.id.editAddDesignationId);
 
         teacherUpdateButton.setOnClickListener(this);
         addDept.setOnClickListener(this);
@@ -248,6 +248,11 @@ public class TeacherEditProfile extends DaggerAppCompatActivity implements View.
         return isName && isId && isEmail && isPhone && isOffice && isInitial;
     }
 
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
+    }
+
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.teacherEditImageId){
@@ -261,23 +266,32 @@ public class TeacherEditProfile extends DaggerAppCompatActivity implements View.
             teacherEditDesignation.setText(designationSpinner.getSelectedItem().toString());
         }
         else if(view.getId()==R.id.teacherUpdateButtonId){
-            // get all data...
-            String name= teacherName.getText().toString();
-            String id= teacherId.getText().toString();
-            String email= teacherEmail.getText().toString();
-            String mobile= teacherMobile.getText().toString();
-            String designation= teacherEditDesignation.getText().toString();
-            String department= teacherEditDept.getText().toString();
-            String office= teacherOffice.getText().toString();
-            String initial= teacherInitial.getText().toString();
-            Teacher teacher= new Teacher(name,id,email,mobile,department,designation,"image",office,"Not upload yet",initial);
+            boolean isConnect= Check();
+            if(isConnect){
 
-            if(bitmap==null){
-                viewModel.updateWithoutImage(teacher);
+                // get all data...
+                String name= teacherName.getText().toString();
+                String id= teacherId.getText().toString();
+                String email= teacherEmail.getText().toString();
+                String mobile= teacherMobile.getText().toString();
+                String designation= teacherEditDesignation.getText().toString();
+                String department= teacherEditDept.getText().toString();
+                String office= teacherOffice.getText().toString();
+                String initial= teacherInitial.getText().toString();
+                Teacher teacher= new Teacher(name,id,email,mobile,department,designation,"image",office,"Not upload yet",initial);
+
+                if(bitmap==null){
+                    viewModel.updateWithoutImage(teacher);
+                }
+                else {
+                    viewModel.updateWithImage(teacher,bitmap);
+                }
             }
             else {
-                viewModel.updateWithImage(teacher,bitmap);
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
             }
+
         }
     }
 
@@ -313,8 +327,8 @@ public class TeacherEditProfile extends DaggerAppCompatActivity implements View.
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if(resultCode==RESULT_OK){
                 assert result != null;
-                insertImageUri= result.getUri();
-                if(insertImageUri!= null){
+                Uri insertImageUri = result.getUri();
+                if(insertImageUri != null){
                     teacherImage.setImageURI(insertImageUri);
                     convertToByte(insertImageUri);
                 }

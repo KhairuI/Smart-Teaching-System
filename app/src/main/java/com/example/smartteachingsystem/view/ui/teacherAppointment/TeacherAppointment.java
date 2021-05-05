@@ -5,12 +5,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -23,6 +26,8 @@ import com.example.smartteachingsystem.view.notification.APIService;
 import com.example.smartteachingsystem.view.notification.Data;
 import com.example.smartteachingsystem.view.notification.MyResponse;
 import com.example.smartteachingsystem.view.notification.NotificationSender;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
@@ -76,6 +81,11 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
                 sendNotification(token.getToken(),token.getName());
             }
         });
+    }
+
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
     }
 
     private void sendNotification(String token, String name) {
@@ -179,6 +189,11 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
         decline= findViewById(R.id.teacherAppointmentDeclineButtonId);
         decline.setOnClickListener(this);
 
+        ImageView call= findViewById(R.id.teacherAppCallId);
+        call.setOnClickListener(this);
+        ImageView sentEmail= findViewById(R.id.teacherAppEmailId);
+        sentEmail.setOnClickListener(this);
+
     }
 
     @Override
@@ -189,9 +204,17 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
                 editText.setError("Please enter a comment");
             }
             else {
-                result="approve";
-                Response response= new Response("Approve",editText.getText().toString(),studentApp.getPushKey(),studentApp.getuId());
-                viewModel.teacherResponse(response);
+                boolean isConnect= Check();
+                if(isConnect){
+                    result="approve";
+                    Response response= new Response("Approve",editText.getText().toString(),studentApp.getPushKey(),studentApp.getuId());
+                    viewModel.teacherResponse(response);
+                }
+                else {
+                    NoInternetDialogue dialogue= new NoInternetDialogue();
+                    dialogue.show(getSupportFragmentManager(),"no_internet");
+                }
+
             }
 
         }
@@ -201,10 +224,34 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
                 editText.setError("Please enter a comment");
             }
             else {
-                result="decline";
-                Response response= new Response("Decline",editText.getText().toString(),studentApp.getPushKey(),studentApp.getuId());
-                viewModel.teacherResponse(response);
+                boolean isConnect= Check();
+                if(isConnect){
+                    result="decline";
+                    Response response= new Response("Decline",editText.getText().toString(),studentApp.getPushKey(),studentApp.getuId());
+                    viewModel.teacherResponse(response);
+                }
+                else {
+                    NoInternetDialogue dialogue= new NoInternetDialogue();
+                    dialogue.show(getSupportFragmentManager(),"no_internet");
+                }
             }
+        }
+        else if(view.getId()==R.id.teacherAppCallId){
+            String number= "tel:"+phone.getText().toString();
+            Intent intent= new Intent(Intent.ACTION_DIAL, Uri.parse(number));
+            startActivity(intent);
+        }
+        else if(view.getId()==R.id.teacherAppEmailId){
+
+            String to= email.getText().toString();
+            String[] makeTo= to.split(",");
+            Intent intent= new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_EMAIL,makeTo);
+            intent.putExtra(Intent.EXTRA_SUBJECT,"Reply of Appointment");
+            intent.putExtra(Intent.EXTRA_TEXT,"You will come in time");
+            intent.setType("message/rfc822");
+            startActivity(Intent.createChooser(intent,"Choose an email client"));
+
         }
     }
 

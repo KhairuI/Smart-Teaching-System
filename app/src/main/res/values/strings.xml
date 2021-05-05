@@ -54,6 +54,12 @@
     <string name="note">Note</string>
     <string name="search">Search</string>
     <string name="empty">No data found</string>
+    <string name="details">This a smart teaching system app. Which a student can request appointment to teacher. Then teacher can accept or decline
+    this request. Both user(student and teacher) will notified. </string>
+    <string name="name1">Masum Billah</string>
+
+    <string name="name2">Abrar Alvi Nirab</string>
+
 
     <string-array name="department">
 

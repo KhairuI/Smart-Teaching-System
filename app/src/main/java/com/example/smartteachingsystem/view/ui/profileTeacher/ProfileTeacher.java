@@ -19,6 +19,8 @@ import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.model.Teacher;
 import com.example.smartteachingsystem.view.ui.teacherEdit.TeacherEditProfile;
 import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHomeViewModel;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,9 +34,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileTeacher extends DaggerAppCompatActivity implements View.OnClickListener {
 
-    private FloatingActionButton edit;
     private TextInputEditText updateEditText;
-    private TextView toolbarName,name,id,email,dept,phone,office,counseling,update;
+    private TextView toolbarName;
+    private TextView name;
+    private TextView id;
+    private TextView email;
+    private TextView dept;
+    private TextView phone;
+    private TextView office;
+    private TextView counseling;
     private CircleImageView image;
     private ProgressBar progressBar;
     private Toolbar toolbar;
@@ -116,7 +124,7 @@ public class ProfileTeacher extends DaggerAppCompatActivity implements View.OnCl
         toolbarName= findViewById(R.id.profileTeacherToolbarNameId);
         name= findViewById(R.id.profileTeacherNameId);
         id= findViewById(R.id.profileTeacherUserId);
-        edit= findViewById(R.id.teacherEditButtonId);
+        FloatingActionButton edit = findViewById(R.id.teacherEditButtonId);
         edit.setOnClickListener(this);
 
         email= findViewById(R.id.profileTeacherEmailId);
@@ -124,7 +132,7 @@ public class ProfileTeacher extends DaggerAppCompatActivity implements View.OnCl
         phone= findViewById(R.id.profileTeacherMobileId);
         office= findViewById(R.id.profileTeacherOfficeId);
         counseling= findViewById(R.id.teacherCounselingScheduleId);
-        update= findViewById(R.id.updateCounselingTextId);
+        TextView update = findViewById(R.id.updateCounselingTextId);
         progressBar= findViewById(R.id.teacherProfileProgressId);
         update.setOnClickListener(this);
 
@@ -139,9 +147,21 @@ public class ProfileTeacher extends DaggerAppCompatActivity implements View.OnCl
         }
         else if(view.getId()==R.id.updateCounselingTextId){
 
-            openDialogue();
+            boolean isConnect= Check();
+            if(isConnect){
+                openDialogue();
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
 
         }
+    }
+
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
     }
 
     private void openDialogue() {

@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +32,8 @@ import com.example.smartteachingsystem.view.ui.login.LoginActivity;
 import com.example.smartteachingsystem.view.ui.profileTeacher.ProfileTeacher;
 import com.example.smartteachingsystem.view.ui.teacherAppointment.TeacherAppointment;
 import com.example.smartteachingsystem.view.ui.teacherNote.TeacherNote;
+import com.example.smartteachingsystem.view.utils.CheckInternet;
+import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
@@ -57,7 +60,6 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
     private Teacher newTeacher;
     private SwipeRefreshLayout refreshLayout;
     private List<StudentApp> newList= new ArrayList<>();
-
 
     // Dependency Injection
 
@@ -156,22 +158,51 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if(item.getItemId()==R.id.teacherEditId){
-
-            Intent intent= new Intent(TeacherHome.this, ProfileTeacher.class);
-            startActivity(intent);
-
+            boolean isConnect= Check();
+            if(isConnect){
+                Intent intent= new Intent(TeacherHome.this, ProfileTeacher.class);
+                startActivity(intent);
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
         }
         else if(item.getItemId()==R.id.teacherLogoutId){
-            teacherHomeViewModel.logout();
-            goToLoginActivity();
+            boolean isConnect= Check();
+            if(isConnect){
+                teacherHomeViewModel.logout();
+                goToLoginActivity();
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
+
         }
         else if(item.getItemId()==R.id.teacherAboutId){
-            showSnackBar("About");
+            AlertDialog.Builder builder= new AlertDialog.Builder(this);
+            LayoutInflater inflater= getLayoutInflater();
+            final View view= inflater.inflate(R.layout.about_dialogue,null);
+            builder.setView(view).setTitle("About").setCancelable(true).setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            }).create().show();
 
         }
         else if(item.getItemId()==R.id.teacherNoteId){
-            Intent intent = new Intent(TeacherHome.this, TeacherNote.class);
-            startActivity(intent);
+            boolean isConnect= Check();
+            if(isConnect){
+                Intent intent = new Intent(TeacherHome.this, TeacherNote.class);
+                startActivity(intent);
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
+
 
         }
         return super.onOptionsItemSelected(item);
@@ -182,6 +213,11 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    private boolean Check(){
+
+        return CheckInternet.connect(this);
     }
 
 
@@ -212,13 +248,21 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
         }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String value= newList.get(position).getStatus();
-                if(value.equals("Request")){
-                    showSnackBar("Request appointment can not deleted");
+
+                boolean isConnect= Check();
+                if(isConnect){
+                    String value= newList.get(position).getStatus();
+                    if(value.equals("Request")){
+                        showSnackBar("Request appointment can not deleted");
+                    }
+                    else {
+                        teacherHomeViewModel.teacherDelete(key);
+                        observeDelete(position);
+                    }
                 }
                 else {
-                    teacherHomeViewModel.teacherDelete(key);
-                    observeDelete(position);
+                    NoInternetDialogue dialogue= new NoInternetDialogue();
+                    dialogue.show(getSupportFragmentManager(),"no_internet");
                 }
 
             }
