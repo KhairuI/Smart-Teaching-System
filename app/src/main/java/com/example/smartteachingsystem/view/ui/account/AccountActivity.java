@@ -1,9 +1,7 @@
 package com.example.smartteachingsystem.view.ui.account;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,11 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
-import com.example.smartteachingsystem.view.ui.login.LoginViewModel;
-import com.example.smartteachingsystem.view.ui.register.RegisterActivity;
 import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
@@ -24,9 +19,7 @@ import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-
 import javax.inject.Inject;
-
 import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
@@ -151,7 +144,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements View.OnC
         accountPassword= findViewById(R.id.accountPasswordEditTextId);
         accountButton= findViewById(R.id.createAccountButtonId);
         accountButton.setOnClickListener(this);
-        loginNowButton= findViewById(R.id.loginNowButtonId);
+       // loginNowButton= findViewById(R.id.loginNowButtonId);
         loginNowButton.setOnClickListener(this);
         accountText= findViewById(R.id.accountToolbarTextId);
         accountText.setOnClickListener(this);
