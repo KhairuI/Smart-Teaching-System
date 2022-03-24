@@ -34,7 +34,7 @@
                 <TextView
                     android:text="@string/pick_image"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -312,8 +312,8 @@
             <ProgressBar
                 android:id="@+id/teacherProgressId"
                 android:layout_centerInParent="true"
-                android:layout_width="60dp"
-                android:layout_height="60dp">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
             </ProgressBar>
 

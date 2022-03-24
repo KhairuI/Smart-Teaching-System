@@ -6,12 +6,12 @@
 
     <RelativeLayout
         android:id="@+id/mainLayout"
-        android:padding="7dp"
+        android:padding="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:layout_margin="7dp"
+            android:layout_margin="8dp"
             android:id="@+id/topId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -19,8 +19,8 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/singleStudentAppointmentImageId"
                 android:src="@drawable/profile"
-                android:layout_width="45dp"
-                android:layout_height="45dp">
+                android:layout_width="48dp"
+                android:layout_height="48dp">
 
             </de.hdodenhof.circleimageview.CircleImageView>
 
@@ -36,7 +36,7 @@
             <TextView
                 android:text="Akther Hossain"
                 android:id="@+id/singleStudentAppointmentNameId"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:ellipsize="end"
                 android:maxLines="1"
@@ -52,7 +52,7 @@
                 android:text="SAH"
                 android:layout_marginStart="5dp"
                 android:id="@+id/singleStudentAppointmentInitialId"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:layout_alignParentEnd="true"
                 android:textColor="@color/black"
                 android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
             <TextView
                 android:text="Lecturer Dept. of CSE"
                 android:id="@+id/singleStudentAppointmentDeptId"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:layout_below="@id/singleStudentAppointmentNameId"
@@ -76,7 +76,7 @@
             <TextView
                 android:text="Pending"
                 android:id="@+id/singleStudentAppointmentStatusId"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:layout_below="@id/singleStudentAppointmentDeptId"

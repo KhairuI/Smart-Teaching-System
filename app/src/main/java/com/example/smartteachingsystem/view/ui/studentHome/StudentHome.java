@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,40 +17,31 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.bumptech.glide.RequestManager;
 import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.adapter.StudentAppAdapter;
-import com.example.smartteachingsystem.view.adapter.StudentAppointmentAdapter;
 import com.example.smartteachingsystem.view.model.Student;
 import com.example.smartteachingsystem.view.model.TeacherApp;
+import com.example.smartteachingsystem.view.repository.AuthRepository;
+import com.example.smartteachingsystem.view.ui.chatHistory.StudentChatHistoryActivity;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
 import com.example.smartteachingsystem.view.ui.profileStudent.ProfileStudent;
 import com.example.smartteachingsystem.view.ui.teacherList.TeacherList;
 import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.DetailsDialogue;
 import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
-import com.example.smartteachingsystem.view.utils.Resource;
+import com.example.smartteachingsystem.view.utils.SharedPrefUtils;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.installations.FirebaseInstallations;
-import com.google.firebase.installations.InstallationTokenResult;
-import com.google.firebase.messaging.FirebaseMessaging;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import dagger.android.support.DaggerAppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -59,6 +49,7 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
         SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
     // declare all views...
     private CircleImageView profileImage;
+    private ImageView messageIcon;
     private TextView profileName, studentId;
     private FloatingActionButton button;
     private ProgressBar progressBar;
@@ -70,6 +61,7 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
 
     private Student newStudent;
     private StudentHomeViewModel studentHomeViewModel;
+    private SharedPrefUtils prefUtils;
 
 
     // Dependency Injection
@@ -83,6 +75,9 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
     @Inject
     RequestManager requestManager;
 
+    @Inject
+    AuthRepository authRepository;
+
    /* @Inject
     StudentAppointmentAdapter adapter;*/
 
@@ -90,6 +85,7 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_home);
+        prefUtils= new SharedPrefUtils(this);
         findSection();
         studentHomeViewModel = new ViewModelProvider(getViewModelStore(),providerFactory).get(StudentHomeViewModel.class);
         studentHomeViewModel.getStudentInfo();
@@ -98,7 +94,13 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
         observeStudent();
         setRecycleView();
         updateToken();
+        setCurrentUId();
 
+    }
+
+    private void setCurrentUId() {
+        String uId= authRepository.getCurrentUid();
+        prefUtils.setCurrentUId(uId);
     }
 
     private void updateToken() {
@@ -138,8 +140,14 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
                 requestManager.load(student.getImage()).into(profileImage);
                 profileName.setText(student.getName());
                 studentId.setText(student.getId());
+                saveMemory(newStudent);
             }
         });
+    }
+
+    private void saveMemory(Student newStudent) {
+        prefUtils.setName(newStudent.getName());
+        prefUtils.setImage(newStudent.getImage());
     }
 
     private void findSection() {
@@ -147,6 +155,8 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
         setSupportActionBar(toolbar);
         profileImage= findViewById(R.id.studentProfileImageId);
         profileName= findViewById(R.id.studentProfileNameId);
+        messageIcon= findViewById(R.id.message_icon_id);
+        messageIcon.setOnClickListener(this);
         progressBar= findViewById(R.id.studentHomeProgressId);
         searchView= findViewById(R.id.studentHomeSearchId);
         searchView.setOnQueryTextListener(this);
@@ -186,6 +196,7 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
             boolean isConnect= Check();
             if(isConnect){
                 studentHomeViewModel.logout();
+                prefUtils.clearPref();
                 goToLoginActivity();
             }
             else {
@@ -228,7 +239,24 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
                 dialogue.show(getSupportFragmentManager(),"no_internet");
             }
         }
+        else if(view.getId()== R.id.message_icon_id){
+            boolean isConnect= Check();
+            if(isConnect){
+                goToHistoryActivity();
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
+
+        }
     }
+
+    private void goToHistoryActivity() {
+        Intent intent = new Intent(StudentHome.this, StudentChatHistoryActivity.class);
+        startActivity(intent);
+    }
+
     private void goToLoginActivity() {
         Intent intent = new Intent(StudentHome.this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -250,6 +278,7 @@ public class StudentHome extends DaggerAppCompatActivity implements View.OnClick
         String key= newList.get(position).getPushKey();
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
         builder.setTitle("Delete").setIcon(R.drawable.ic_delete).setMessage("Do you want to delete ?")
+
                 .setCancelable(true).setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

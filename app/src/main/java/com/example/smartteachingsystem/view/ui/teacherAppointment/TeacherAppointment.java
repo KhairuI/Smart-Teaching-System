@@ -26,6 +26,7 @@ import com.example.smartteachingsystem.view.notification.APIService;
 import com.example.smartteachingsystem.view.notification.Data;
 import com.example.smartteachingsystem.view.notification.MyResponse;
 import com.example.smartteachingsystem.view.notification.NotificationSender;
+import com.example.smartteachingsystem.view.ui.chatting.TeacherChattingActivity;
 import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.StateResource;
@@ -47,6 +48,7 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
     private TextInputEditText editText;
     private Button approve, decline;
     private CircleImageView imageView;
+    private ImageView sentMessage;
     private StudentApp studentApp;
     private TeacherAppointmentViewModel viewModel;
     String result="";
@@ -188,6 +190,8 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
         approve.setOnClickListener(this);
         decline= findViewById(R.id.teacherAppointmentDeclineButtonId);
         decline.setOnClickListener(this);
+        sentMessage= findViewById(R.id.iv_sent_message);
+        sentMessage.setOnClickListener(this);
 
         ImageView call= findViewById(R.id.teacherAppCallId);
         call.setOnClickListener(this);
@@ -252,6 +256,11 @@ public class TeacherAppointment extends DaggerAppCompatActivity implements View.
             intent.setType("message/rfc822");
             startActivity(Intent.createChooser(intent,"Choose an email client"));
 
+        }
+        else if(view.getId()==R.id.iv_sent_message){
+            Intent intent= new Intent(this, TeacherChattingActivity.class);
+            intent.putExtra("student_uid",studentApp.getuId());
+            startActivity(intent);
         }
     }
 

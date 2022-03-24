@@ -47,7 +47,7 @@
 
                     <TextView
 
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:id="@+id/profileStudentNameId"
                         android:text="Khairul Islam"
                         android:textColor="@color/black"
@@ -59,7 +59,7 @@
                     <TextView
 
                         android:id="@+id/profileStudentUserId"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="172-15-9838"
                         android:textColor="@color/black"
                         android:layout_marginTop="2dp"
@@ -83,8 +83,8 @@
 
                         <ImageView
                             android:src="@drawable/ic_email"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp">
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
 
                         </ImageView>
                         <TextView
@@ -92,7 +92,7 @@
                             android:layout_gravity="center_vertical"
                             android:id="@+id/profileStudentEmailId"
                             android:textColor="@color/black"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:text="khairul15-9838@diu.edu.bd"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -108,8 +108,8 @@
 
                         <ImageView
                             android:src="@drawable/ic_department"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp">
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
 
                         </ImageView>
                         <TextView
@@ -117,7 +117,7 @@
                             android:layout_marginStart="5dp"
                             android:textColor="@color/black"
                             android:layout_gravity="center_vertical"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:text="CSE | Section: C"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -133,8 +133,8 @@
 
                         <ImageView
                             android:src="@drawable/ic_phone"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp">
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
 
                         </ImageView>
                         <TextView
@@ -142,7 +142,7 @@
                             android:id="@+id/profileStudentMobileId"
                             android:layout_marginStart="5dp"
                             android:textColor="@color/black"
-                            android:textSize="18sp"
+                            android:textSize="14sp"
                             android:text="01515267153"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">

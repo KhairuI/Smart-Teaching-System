@@ -3,16 +3,23 @@ package com.example.smartteachingsystem.view.repository;
 import android.graphics.Bitmap;
 
 import com.example.smartteachingsystem.view.dataSource.FirebaseDataSource;
+import com.example.smartteachingsystem.view.model.ChatUser;
+import com.example.smartteachingsystem.view.model.Message;
+import com.example.smartteachingsystem.view.model.StudentChatUser;
+import com.example.smartteachingsystem.view.model.StudentMessage;
 import com.example.smartteachingsystem.view.model.Note;
 import com.example.smartteachingsystem.view.model.Response;
 import com.example.smartteachingsystem.view.model.Student;
 import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.model.Teacher;
 import com.example.smartteachingsystem.view.model.TeacherApp;
+import com.example.smartteachingsystem.view.model.TeacherChatUser;
+import com.example.smartteachingsystem.view.model.TeacherMessage;
 import com.example.smartteachingsystem.view.model.Teacher_List;
 import com.example.smartteachingsystem.view.model.Token;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
@@ -29,6 +36,33 @@ public class FirebaseDataRepository {
     public FirebaseDataRepository(FirebaseDataSource firebaseDataSource) {
         this.firebaseDataSource = firebaseDataSource;
     }
+
+
+    // get student Chat history
+    public Flowable<List<StudentChatUser>> getHistoryList(){
+         return firebaseDataSource.getHistoryList();
+    }
+
+    // get teacher Chat history
+    public Flowable<List<TeacherChatUser>> getTeacherHistoryList(){
+        return firebaseDataSource.getTeacherHistoryList();
+    }
+
+    // get message list....
+    public Flowable<QuerySnapshot> getMessageList(String uId){
+        return firebaseDataSource.getMessageList(uId);
+    }
+
+    //send message from student site
+    public Completable sendStudentMessage(Message message,StudentChatUser studentChatUser, TeacherChatUser teacherChatUser){
+         return firebaseDataSource.sendStudentMessage(message, studentChatUser, teacherChatUser);
+    }
+
+    //send message from teacher site
+    public Completable sendTeacherMessage(Message message, TeacherChatUser teacherChatUser, StudentChatUser studentChatUser){
+        return firebaseDataSource.sendTeacherMessage(message, teacherChatUser,studentChatUser);
+    }
+
 
     // delete note....
     public Completable noteDelete(String pushKey){
@@ -95,6 +129,12 @@ public class FirebaseDataRepository {
         return firebaseDataSource.setTeacherData(teacher, bitmap);
     }
 
+    // retrieve teacher profile data in chatting activity
+    public Flowable<DocumentSnapshot> getTeacherInfoInChatting(String uId){
+        return firebaseDataSource.getTeacherInfoInChatting(uId);
+    }
+
+
     // retrieve teacher profile data
 
     public Flowable<DocumentSnapshot> getTeacherInfo(){
@@ -104,6 +144,11 @@ public class FirebaseDataRepository {
     // retrieve student profile data
     public Flowable<DocumentSnapshot> getStudentInfo(){
         return firebaseDataSource.getStudentInfo();
+    }
+
+    // get student chatting data
+    public Flowable<DocumentSnapshot> getStudentChattingInfo(String uId){
+        return firebaseDataSource.getStudentChattingInfo(uId);
     }
 
     // **** Retrieve teacher list here.
@@ -159,5 +204,11 @@ public class FirebaseDataRepository {
     public Completable teacherDelete(String pushKey){
         return firebaseDataSource.teacherDelete(pushKey);
     }
+
+    // chat history delete......
+    public Completable chatDelete(String uid){
+        return firebaseDataSource.chatDelete(uid);
+    }
+
 
 }

@@ -31,6 +31,7 @@ import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.DataConverter;
 import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
+import com.example.smartteachingsystem.view.utils.SharedPrefUtils;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
@@ -62,6 +63,7 @@ public class StudentRegister extends DaggerAppCompatActivity implements View.OnC
     private Uri insertImageUri= null;
     private StudentRegisterViewModel studentRegisterViewModel;
     private Bitmap bitmap;
+    private SharedPrefUtils prefUtils;
 
     //Rx variable
     Observable<Boolean> formObservable;
@@ -74,6 +76,7 @@ public class StudentRegister extends DaggerAppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_register);
+        prefUtils= new SharedPrefUtils(this);
         setToolbar();
         findSection();
         setSpinners();
@@ -94,6 +97,7 @@ public class StudentRegister extends DaggerAppCompatActivity implements View.OnC
                             break;
                         case SUCCESS:
                             studentProgress.setVisibility(View.INVISIBLE);
+                            prefUtils.setRole("student");
                             goToStudentProfile();
                             break;
                         case ERROR:

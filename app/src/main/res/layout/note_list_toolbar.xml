@@ -15,10 +15,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/img_back"
+                    android:src="@drawable/ic_back"
+                    android:layout_centerVertical="true"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp">
+
+                </ImageView>
+
                 <TextView
                     android:text="@string/note_list"
                     android:id="@+id/noteToolbarTextId"
-                    android:textSize="23sp"
+                    android:layout_toEndOf="@id/img_back"
+                    android:layout_marginStart="8dp"
+                    android:textSize="18sp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:layout_centerVertical="true"

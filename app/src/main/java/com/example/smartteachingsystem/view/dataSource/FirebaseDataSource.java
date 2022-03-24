@@ -5,22 +5,28 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+import com.example.smartteachingsystem.view.model.ChatUser;
+import com.example.smartteachingsystem.view.model.Message;
+import com.example.smartteachingsystem.view.model.StudentChatUser;
+import com.example.smartteachingsystem.view.model.StudentMessage;
 import com.example.smartteachingsystem.view.model.Note;
 import com.example.smartteachingsystem.view.model.Response;
 import com.example.smartteachingsystem.view.model.Student;
 import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.model.Teacher;
 import com.example.smartteachingsystem.view.model.TeacherApp;
+import com.example.smartteachingsystem.view.model.TeacherChatUser;
+import com.example.smartteachingsystem.view.model.TeacherMessage;
 import com.example.smartteachingsystem.view.model.Teacher_List;
 import com.example.smartteachingsystem.view.model.Token;
 import com.example.smartteachingsystem.view.utils.DataConverter;
 import com.example.smartteachingsystem.view.utils.Nodes;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -29,9 +35,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +72,212 @@ public class FirebaseDataSource {
         this.fireStore = fireStore;
         this.storageReference = storageReference;
         currentUid= firebaseAuthSource.getCurrentUid();
+    }
+
+    // load student chat history
+    public Flowable<List<StudentChatUser> > getHistoryList(){
+        final List<StudentChatUser> historyLists= new ArrayList<>();
+        return Flowable.create(new FlowableOnSubscribe<List<StudentChatUser>>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<List<StudentChatUser>> emitter) throws Throwable {
+                fireStore.collection(Nodes.CHAT).document(Nodes.USERS).collection(currentUid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<QuerySnapshot> task) {
+                        historyLists.clear();
+                        for(DocumentSnapshot dc:task.getResult()){
+
+                            StudentChatUser studentChatUser = dc.toObject(StudentChatUser.class);
+                            historyLists.add(studentChatUser);
+                        }
+                        emitter.onNext(historyLists);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        },BackpressureStrategy.BUFFER);
+    }
+
+
+    // load teacher chat history
+    public Flowable<List<TeacherChatUser> > getTeacherHistoryList(){
+        final List<TeacherChatUser> historyLists= new ArrayList<>();
+        return Flowable.create(new FlowableOnSubscribe<List<TeacherChatUser>>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<List<TeacherChatUser>> emitter) throws Throwable {
+                fireStore.collection(Nodes.CHAT).document(Nodes.USERS).collection(currentUid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<QuerySnapshot> task) {
+                        historyLists.clear();
+                        for(DocumentSnapshot dc:task.getResult()){
+
+                            TeacherChatUser teacherChatUser = dc.toObject(TeacherChatUser.class);
+                            historyLists.add(teacherChatUser);
+                        }
+                        emitter.onNext(historyLists);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        },BackpressureStrategy.BUFFER);
+    }
+
+
+    // get all message....
+
+    public Flowable<QuerySnapshot> getMessageList(String uId){
+        return Flowable.create(new FlowableOnSubscribe<QuerySnapshot>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<QuerySnapshot> emitter) throws Throwable {
+
+                CollectionReference reference = fireStore.collection("chat").document("message").collection(uId);
+                final ListenerRegistration registration = reference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
+                        if(error != null){
+                            emitter.onError(error);
+                        }
+                        if(value != null){
+                            emitter.onNext(value);
+                        }
+                    }
+                });
+                emitter.setCancellable(new Cancellable() {
+                    @Override
+                    public void cancel() throws Throwable {
+                        registration.remove();
+                    }
+                });
+            }
+        },BackpressureStrategy.BUFFER);
+    }
+
+    // send message from student site....
+    public Completable sendStudentMessage(Message message,StudentChatUser studentChatUser, TeacherChatUser teacherChatUser){
+
+        return  Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+
+                WriteBatch messageBatch = fireStore.batch();
+                WriteBatch userBatch = fireStore.batch();
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+                // make message reference...
+                final DocumentReference my_message_ref= fireStore.collection("chat").document("message")
+                        .collection(currentUid+"_"+ studentChatUser.getReceiverUid()).document(timestamp.toString().trim());
+
+                final DocumentReference partner_message_ref= fireStore.collection("chat").document("message")
+                        .collection(studentChatUser.getReceiverUid()+"_"+ currentUid).document(timestamp.toString().trim());
+                messageBatch.set(my_message_ref, message);
+                messageBatch.set(partner_message_ref, message);
+
+                // make user reference...
+                final DocumentReference my_ref= fireStore.collection("chat").document("users")
+                        .collection(currentUid).document(studentChatUser.getReceiverUid());
+
+                final DocumentReference partner_ref= fireStore.collection("chat").document("users")
+                        .collection(studentChatUser.getReceiverUid()).document(currentUid);
+                userBatch.set(my_ref, studentChatUser);
+                userBatch.set(partner_ref, teacherChatUser);
+
+                // now start to import...
+
+                messageBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        userBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                emitter.onComplete();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@androidx.annotation.NonNull @NotNull Exception e) {
+                                emitter.onError(e);
+                            }
+                        });
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull @NotNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+
+            }
+        });
+    }
+
+
+
+    // send message from Teacher site....
+    public Completable sendTeacherMessage(Message message, TeacherChatUser teacherChatUser, StudentChatUser studentChatUser){
+
+        return  Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+
+                WriteBatch messageBatch = fireStore.batch();
+                WriteBatch userBatch = fireStore.batch();
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+                // make message reference...
+                final DocumentReference my_message_ref= fireStore.collection("chat").document("message")
+                        .collection(currentUid+"_"+ teacherChatUser.getReceiverUid()).document(timestamp.toString().trim());
+
+                final DocumentReference partner_message_ref= fireStore.collection("chat").document("message")
+                        .collection(teacherChatUser.getReceiverUid()+"_"+ currentUid).document(timestamp.toString().trim());
+
+                messageBatch.set(my_message_ref, message);
+                messageBatch.set(partner_message_ref, message);
+
+                // make user reference...
+                final DocumentReference my_ref= fireStore.collection("chat").document("users")
+                        .collection(currentUid).document(teacherChatUser.getReceiverUid());
+
+                final DocumentReference partner_ref= fireStore.collection("chat").document("users")
+                        .collection(teacherChatUser.getReceiverUid()).document(currentUid);
+                userBatch.set(my_ref, teacherChatUser);
+                userBatch.set(partner_ref, studentChatUser);
+
+                // now start to import...
+
+                messageBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        userBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                emitter.onComplete();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@androidx.annotation.NonNull @NotNull Exception e) {
+                                emitter.onError(e);
+                            }
+                        });
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull @NotNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+
+            }
+        });
     }
 
     // added teacher Note......
@@ -661,6 +877,36 @@ public class FirebaseDataSource {
 
     }
 
+    // retrieve teacher profile data in chatting activity
+
+    public Flowable<DocumentSnapshot> getTeacherInfoInChatting(String uId){
+        return Flowable.create(new FlowableOnSubscribe<DocumentSnapshot>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<DocumentSnapshot> emitter) throws Throwable {
+                DocumentReference reference= fireStore.collection(Nodes.ALL_TEACHERS).document(uId);
+                final ListenerRegistration registration= reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if(e!= null){
+                            emitter.onError(e);
+                        }
+                        if(documentSnapshot != null){
+                            emitter.onNext(documentSnapshot);
+                        }
+
+                    }
+                });
+
+                emitter.setCancellable(new Cancellable() {
+                    @Override
+                    public void cancel() throws Throwable {
+                        registration.remove();
+                    }
+                });
+            }
+        }, BackpressureStrategy.BUFFER);
+    }
+
     // retrieve teacher profile data
 
     public Flowable<DocumentSnapshot> getTeacherInfo(){
@@ -723,6 +969,40 @@ public class FirebaseDataSource {
             }
         }, BackpressureStrategy.BUFFER);
     }
+
+    public Flowable<DocumentSnapshot> getStudentChattingInfo(String uId){
+        return Flowable.create(new FlowableOnSubscribe<DocumentSnapshot>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<DocumentSnapshot> emitter) throws Throwable {
+                DocumentReference reference= fireStore.collection(Nodes.STUDENTS_PROFILE).document(uId)
+                        .collection("profile").document("profile_key");
+                final ListenerRegistration registration= reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if(e!= null){
+                            emitter.onError(e);
+                        }
+                        if(documentSnapshot != null){
+                            student= documentSnapshot.toObject(Student.class);
+                            emitter.onNext(documentSnapshot);
+                        }
+
+                    }
+                });
+
+                emitter.setCancellable(new Cancellable() {
+                    @Override
+                    public void cancel() throws Throwable {
+                        registration.remove();
+                    }
+                });
+            }
+        }, BackpressureStrategy.BUFFER);
+    }
+
+    // retrieve student chat Info
+
+
 
     // **** Retrieve teacher list  alternatively here......
 
@@ -1050,6 +1330,30 @@ public class FirebaseDataSource {
                 final DocumentReference teacher_reference= fireStore.collection(Nodes.TEACHERS_PROFILE).document(currentUid)
                         .collection("appointment").document(pushKey);
                 teacher_reference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        emitter.onComplete();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        });
+    }
+
+    // chat history delete......
+
+    public Completable chatDelete(String uId){
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+
+                final DocumentReference chat_ref= fireStore.collection(Nodes.CHAT).document(Nodes.USERS)
+                        .collection(currentUid).document(uId);
+                chat_ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         emitter.onComplete();

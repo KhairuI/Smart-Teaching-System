@@ -16,7 +16,7 @@
 
                 <TextView
                     android:text="@string/teacher_register"
-                    android:textSize="23sp"
+                    android:textSize="18sp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textColor="@color/white"

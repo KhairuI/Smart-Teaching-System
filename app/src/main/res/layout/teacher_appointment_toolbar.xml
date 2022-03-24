@@ -18,24 +18,27 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/teacherAppointmentImageId"
                     android:src="@drawable/profile"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp">
+                    android:layout_width="48dp"
+                    android:layout_height="48dp">
 
                 </de.hdodenhof.circleimageview.CircleImageView>
 
                 <RelativeLayout
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="8dp"
                     android:layout_toEndOf="@id/teacherAppointmentImageId"
+                    android:layout_toStartOf="@id/iv_sent_message"
                     android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:text="MD. Khairul Islam"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:id="@+id/teacherAppointmentNameId"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
@@ -48,7 +51,7 @@
                         android:layout_below="@id/teacherAppointmentNameId"
                         android:id="@+id/teacherAppointmentUniversityId"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
@@ -58,6 +61,16 @@
                 </RelativeLayout>
 
 
+                <ImageView
+                    android:src="@drawable/ic_send_message"
+                    android:id="@+id/iv_sent_message"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp">
+
+                </ImageView>
 
             </RelativeLayout>
 

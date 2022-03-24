@@ -24,7 +24,7 @@
         <TextView
             android:id="@+id/counceling"
             android:layout_marginTop="5dp"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_centerHorizontal="true"
@@ -46,21 +46,22 @@
         </androidx.appcompat.widget.SearchView>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:layout_below="@id/studentHomeSearchId"
             android:id="@+id/studentHomeRefreshId"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/studentHomeSearchId"
+            android:layout_marginTop="6dp">
+
             <androidx.recyclerview.widget.RecyclerView
-                android:padding="5dp"
                 android:id="@+id/studentRecycleViewId"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="5dp">
 
             </androidx.recyclerview.widget.RecyclerView>
 
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
 
     </RelativeLayout>
@@ -82,8 +83,8 @@
     <ProgressBar
         android:id="@+id/studentHomeProgressId"
         android:layout_centerInParent="true"
-        android:layout_width="60dp"
-        android:layout_height="60dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     </ProgressBar>
 

@@ -42,8 +42,8 @@
     <ProgressBar
         android:id="@+id/noteProgressId"
         android:layout_centerInParent="true"
-        android:layout_width="60dp"
-        android:layout_height="60dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     </ProgressBar>
 
@@ -63,7 +63,8 @@
     <TextView
         android:text="@string/empty"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="14sp"
+        android:visibility="gone"
         android:id="@+id/noteEmptyId"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"

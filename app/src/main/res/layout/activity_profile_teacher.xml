@@ -47,7 +47,7 @@
 
                     <TextView
 
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:id="@+id/profileTeacherNameId"
                         android:text="Masud Rabbani"
                         android:textColor="@color/black"
@@ -59,7 +59,7 @@
                     <TextView
 
                         android:id="@+id/profileTeacherUserId"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="712204321"
                         android:textColor="@color/black"
                         android:layout_marginTop="2dp"
@@ -83,8 +83,8 @@
 
                         <ImageView
                             android:src="@drawable/ic_email"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp">
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
 
                         </ImageView>
                         <TextView
@@ -92,7 +92,7 @@
                             android:layout_gravity="center_vertical"
                             android:id="@+id/profileTeacherEmailId"
                             android:textColor="@color/black"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:text="masud.cse@diu.edu.bd"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -108,8 +108,8 @@
 
                         <ImageView
                             android:src="@drawable/ic_department"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp">
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
 
                         </ImageView>
                         <TextView
@@ -117,7 +117,7 @@
                             android:layout_marginStart="5dp"
                             android:textColor="@color/black"
                             android:layout_gravity="center_vertical"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:text="Lecturer Dept. of CSE"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -133,8 +133,8 @@
 
                         <ImageView
                             android:src="@drawable/ic_phone"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp">
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
 
                         </ImageView>
                         <TextView
@@ -142,7 +142,7 @@
                             android:id="@+id/profileTeacherMobileId"
                             android:layout_marginStart="5dp"
                             android:textColor="@color/black"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:text="01515267153"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -158,8 +158,8 @@
 
                         <ImageView
                             android:src="@drawable/ic_home"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp">
+                            android:layout_width="24dp"
+                            android:layout_height="24dp">
 
                         </ImageView>
                         <TextView
@@ -167,7 +167,7 @@
                             android:id="@+id/profileTeacherOfficeId"
                             android:layout_marginStart="5dp"
                             android:textColor="@color/black"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:text="CSE422"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -185,7 +185,8 @@
                         <TextView
                             android:textColor="@color/green"
                             android:layout_gravity="center_horizontal"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
                             android:text="@string/counseling_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -204,7 +205,7 @@
                                 android:justificationMode="inter_word"
                                 android:id="@+id/teacherCounselingScheduleId"
                                 android:layout_gravity="center_horizontal"
-                                android:textSize="20sp"
+                                android:textSize="16sp"
                                 android:text="@string/counseling_schedule"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
@@ -218,7 +219,8 @@
                             android:id="@+id/updateCounselingTextId"
                             android:textColor="@color/small_blue"
                             android:layout_gravity="center_horizontal"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
                             android:text="@string/update_counseling"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">

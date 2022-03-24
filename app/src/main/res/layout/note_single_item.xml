@@ -6,7 +6,7 @@
 
     <RelativeLayout
         android:id="@+id/mainLayout"
-        android:layout_margin="7dp"
+        android:layout_margin="4dp"
         android:padding="7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -15,7 +15,7 @@
             android:text="@string/name"
             android:id="@+id/singleNoteNameId"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:ellipsize="end"
             android:maxLines="1"
@@ -31,7 +31,7 @@
             android:textColor="@color/black"
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@id/singleNoteDateId"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:ellipsize="end"
             android:maxLines="1"
             android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
             android:textColor="@color/black"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="5dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 

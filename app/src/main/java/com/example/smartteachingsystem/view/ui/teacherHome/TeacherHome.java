@@ -13,11 +13,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -28,12 +30,15 @@ import com.example.smartteachingsystem.view.adapter.TeacherAppointmentAdapter;
 import com.example.smartteachingsystem.view.model.StudentApp;
 import com.example.smartteachingsystem.view.model.Teacher;
 import com.example.smartteachingsystem.view.model.TeacherApp;
+import com.example.smartteachingsystem.view.repository.AuthRepository;
+import com.example.smartteachingsystem.view.ui.chatHistory.TeacherChatHistoryActivity;
 import com.example.smartteachingsystem.view.ui.login.LoginActivity;
 import com.example.smartteachingsystem.view.ui.profileTeacher.ProfileTeacher;
 import com.example.smartteachingsystem.view.ui.teacherAppointment.TeacherAppointment;
 import com.example.smartteachingsystem.view.ui.teacherNote.TeacherNote;
 import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
+import com.example.smartteachingsystem.view.utils.SharedPrefUtils;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
@@ -53,13 +58,14 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
         SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
     // declare all views...
     private CircleImageView teacherProfileImage;
-    private TextView teacherName, teacherId;
+    private TextView teacherName, teacherId,noData;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private TeacherHomeViewModel teacherHomeViewModel;
     private Teacher newTeacher;
     private SwipeRefreshLayout refreshLayout;
     private List<StudentApp> newList= new ArrayList<>();
+    private SharedPrefUtils prefUtils;
 
     // Dependency Injection
 
@@ -72,6 +78,9 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
     @Inject
     TeacherAppAdapter adapter;
 
+    @Inject
+    AuthRepository authRepository;
+
   /*  @Inject
     TeacherAppointmentAdapter adapter;*/
 
@@ -82,6 +91,7 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
         setContentView(R.layout.activity_teacher_home);
         setToolbar();
         findSection();
+        prefUtils= new SharedPrefUtils(this);
         teacherHomeViewModel = new ViewModelProvider(getViewModelStore(),providerFactory).get(TeacherHomeViewModel.class);
         teacherHomeViewModel.getTeacherInfo();
         observeTeacherInfo();
@@ -89,15 +99,30 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
         observeStudentAppointment();
         setRecycleView();
         updateToken();
+        setCurrentUId();
     }
+
+    private void setCurrentUId() {
+        String uId= authRepository.getCurrentUid();
+        prefUtils.setCurrentUId(uId);
+        Log.d("mymsg", "setCurrentUId: "+prefUtils.getCurrentUId());
+    }
+
 
     private void observeStudentAppointment() {
         teacherHomeViewModel.observeStudentAppointment().observe(this, new Observer<List<StudentApp>>() {
             @Override
             public void onChanged(List<StudentApp> studentApps) {
-                newList= studentApps;
                 progressBar.setVisibility(View.GONE);
-                adapter.setList(newList);
+                if(studentApps.size()==0){
+                    noData.setVisibility(View.VISIBLE);
+                }
+                else {
+                    noData.setVisibility(View.GONE);
+                    newList= studentApps;
+                    adapter.setList(newList);
+                }
+
             }
         });
 
@@ -125,8 +150,14 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
                 requestManager.load(teacher.getImage()).into(teacherProfileImage);
                 teacherName.setText(teacher.getName());
                 teacherId.setText(teacher.getId());
+                saveMemory(newTeacher);
             }
         });
+    }
+
+    private void saveMemory(Teacher newTeacher) {
+        prefUtils.setName(newTeacher.getName());
+        prefUtils.setImage(newTeacher.getImage());
     }
 
     private void setToolbar() {
@@ -145,6 +176,14 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
         progressBar= findViewById(R.id.teacherHomeProgressId);
         refreshLayout= findViewById(R.id.teacherHomeRefreshId);
         refreshLayout.setOnRefreshListener(this);
+        noData= findViewById(R.id.txt_no_data);
+        ImageView messageIcon= findViewById(R.id.message_icon_id);
+        messageIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TeacherHome.this, TeacherChatHistoryActivity.class));
+            }
+        });
     }
 
     @Override
@@ -172,6 +211,7 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
             boolean isConnect= Check();
             if(isConnect){
                 teacherHomeViewModel.logout();
+                prefUtils.clearPref();
                 goToLoginActivity();
             }
             else {
@@ -309,5 +349,21 @@ public class TeacherHome extends DaggerAppCompatActivity implements TeacherAppAd
     public boolean onQueryTextChange(String newText) {
         adapter.getFilter().filter(newText);
         return false;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        teacherHomeViewModel.getTeacherInfo();
+        teacherHomeViewModel.getStudentAppointment();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        teacherHomeViewModel.getTeacherInfo();
+        teacherHomeViewModel.getStudentAppointment();
+
     }
 }

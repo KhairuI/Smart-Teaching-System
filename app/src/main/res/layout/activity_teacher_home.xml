@@ -21,9 +21,21 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/txt_no_data"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:text="No data found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+        <TextView
             android:id="@+id/counceling"
             android:layout_marginTop="5dp"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_centerHorizontal="true"

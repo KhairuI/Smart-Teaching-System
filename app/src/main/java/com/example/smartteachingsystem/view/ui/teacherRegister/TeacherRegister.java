@@ -30,6 +30,7 @@ import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.DataConverter;
 import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
+import com.example.smartteachingsystem.view.utils.SharedPrefUtils;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHome;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
@@ -62,6 +63,7 @@ public class TeacherRegister extends DaggerAppCompatActivity implements View.OnC
     private Uri insertImageUri= null;
     private Bitmap bitmap;
     private TeacherRegisterViewModel teacherRegisterViewModel;
+    private SharedPrefUtils prefUtils;
 
     //Rx variable
     Observable<Boolean> formObservable;
@@ -75,6 +77,7 @@ public class TeacherRegister extends DaggerAppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_register);
+        prefUtils= new SharedPrefUtils(this);
         setToolbar();
         findSection();
         setSpinners();
@@ -95,13 +98,14 @@ public class TeacherRegister extends DaggerAppCompatActivity implements View.OnC
         teacherRegisterViewModel.observeSetTeacherData().observe(this, new Observer<StateResource>() {
             @Override
             public void onChanged(StateResource stateResource) {
-                if(stateResource!= null){
+                if(stateResource != null){
                     switch (stateResource.status){
                         case LOADING:
                             teacherProgress.setVisibility(View.VISIBLE);
                             break;
                         case SUCCESS:
                             teacherProgress.setVisibility(View.INVISIBLE);
+                            prefUtils.setRole("teacher");
                             goToTeacherProfile();
                             break;
                         case ERROR:

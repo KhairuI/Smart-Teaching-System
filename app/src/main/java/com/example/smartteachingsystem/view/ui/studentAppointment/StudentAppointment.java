@@ -1,6 +1,5 @@
 package com.example.smartteachingsystem.view.ui.studentAppointment;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,10 +23,9 @@ import com.example.smartteachingsystem.view.notification.APIService;
 import com.example.smartteachingsystem.view.notification.Data;
 import com.example.smartteachingsystem.view.notification.MyResponse;
 import com.example.smartteachingsystem.view.notification.NotificationSender;
-import com.example.smartteachingsystem.view.ui.studentRegister.StudentRegisterViewModel;
+import com.example.smartteachingsystem.view.ui.chatting.StudentChattingActivity;
 import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
-import com.example.smartteachingsystem.view.utils.RxBindingHelper;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.viewModel.ViewModelProviderFactory;
 import com.google.android.material.snackbar.Snackbar;
@@ -39,17 +37,13 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.functions.BiFunction;
-import kotlin.jvm.functions.Function1;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class StudentAppointment extends DaggerAppCompatActivity implements View.OnClickListener {
     private CircleImageView image;
+    private ImageView sentMessage;
     private TextView name,id,initial,email,department, phone,office,counseling;
     private TextInputEditText editText;
     private ProgressBar progressBar;
@@ -146,6 +140,7 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
     private void setInfo() {
         requestManager.load(list.getImage()).into(image);
         name.setText(list.getName());
+       // name.setSelected(true);
         id.setText(list.getId());
         initial.setText("Teacher initial: "+list.getInitial());
         email.setText(list.getEmail());
@@ -166,8 +161,10 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
         id= findViewById(R.id.studentAppointmentUniversityId);
         initial= findViewById(R.id.studentAppointmentInitialId);
         email= findViewById(R.id.studentAppointmentEmailId);
+        email.setOnClickListener(this);
         department= findViewById(R.id.studentAppointmentDeptId);
         phone= findViewById(R.id.studentAppointmentMobileId);
+        phone.setOnClickListener(this);
         office= findViewById(R.id.studentAppointmentOfficeId);
         counseling= findViewById(R.id.counselingScheduleId);
         progressBar= findViewById(R.id.studentAppointmentProgressId);
@@ -180,6 +177,9 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
         call.setOnClickListener(this);
         ImageView sentEmail= findViewById(R.id.studentAppEmailId);
         sentEmail.setOnClickListener(this);
+
+        sentMessage= findViewById(R.id.iv_sent_message);
+        sentMessage.setOnClickListener(this);
 
     }
 
@@ -224,23 +224,49 @@ public class StudentAppointment extends DaggerAppCompatActivity implements View.
 
         }
         else if(view.getId()==R.id.studentAppPhoneId){
-            String number= "tel:"+phone.getText().toString();
-            Intent intent= new Intent(Intent.ACTION_DIAL, Uri.parse(number));
-            startActivity(intent);
+            makePhoneCall();
+        }
+        else if(view.getId()==R.id.studentAppPhoneId){
+            makePhoneCall();
+        }
+        else if(view.getId()==R.id.studentAppointmentMobileId){
+            sentEmail();
+        }
+        else if(view.getId()==R.id.studentAppointmentEmailId){
+            sentEmail();
+        }
+        else if(view.getId()==R.id.iv_sent_message){
+            boolean isConnect= Check();
+            if(isConnect){
+                String teacherUid= list.getuId();
+                Intent intent= new Intent(this, StudentChattingActivity.class);
+                intent.putExtra("teacher_uid",teacherUid);
+                startActivity(intent);
+            }
+            else {
+                NoInternetDialogue dialogue= new NoInternetDialogue();
+                dialogue.show(getSupportFragmentManager(),"no_internet");
+            }
 
         }
-        else if(view.getId()==R.id.studentAppEmailId){
 
-            String to= email.getText().toString();
-            String[] makeTo= to.split(",");
-            Intent intent= new Intent(Intent.ACTION_SEND);
-            intent.putExtra(Intent.EXTRA_EMAIL,makeTo);
-            intent.putExtra(Intent.EXTRA_SUBJECT,"Request for Appointment");
-            intent.putExtra(Intent.EXTRA_TEXT,"Sir/Madam I need your appointment for ...");
-            intent.setType("message/rfc822");
-            startActivity(Intent.createChooser(intent,"Choose an email client"));
-        }
+    }
 
+    private void makePhoneCall() {
+        String number= "tel:"+phone.getText().toString();
+        Intent intent= new Intent(Intent.ACTION_DIAL, Uri.parse(number));
+        startActivity(intent);
+    }
+
+    private void sentEmail() {
+        String to= email.getText().toString();
+        String[] makeTo= to.split(",");
+        Intent intent= new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_EMAIL,makeTo);
+        intent.putExtra(Intent.EXTRA_SUBJECT,"Request for Appointment");
+        intent.putExtra(Intent.EXTRA_TEXT,"Sir/Madam I need your appointment for ...");
+        intent.setType("message/rfc822");
+        startActivity(Intent.createChooser(intent,"Choose an email client"));
     }
 
 

@@ -3,7 +3,8 @@
     package="com.example.smartteachingsystem">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -17,37 +18,61 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartTeachingSystem">
-        <activity android:name=".view.ui.teacherNote.TeacherNote"
-            android:parentActivityName=".view.ui.teacherHome.TeacherHome"/>
+        <activity android:name=".view.ui.chatting.TeacherChattingActivity"></activity>
+        <activity android:name=".view.ui.chatHistory.TeacherChatHistoryActivity" />
+        <activity android:name=".view.ui.chatting.StudentChattingActivity" />
+        <activity android:name=".view.ui.chatHistory.StudentChatHistoryActivity" />
+        <activity
+            android:name=".view.ui.teacherNote.TeacherNote"
+            android:parentActivityName=".view.ui.teacherHome.TeacherHome"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.ui.profileTeacher.ProfileTeacher"
-            android:parentActivityName=".view.ui.teacherHome.TeacherHome" />
+            android:parentActivityName=".view.ui.teacherHome.TeacherHome"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.ui.profileStudent.ProfileStudent"
-            android:parentActivityName=".view.ui.studentHome.StudentHome" />
+            android:parentActivityName=".view.ui.studentHome.StudentHome"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.ui.studentAppointment.StudentAppointment"
-            android:parentActivityName=".view.ui.teacherList.TeacherList" />
+            android:parentActivityName=".view.ui.teacherList.TeacherList"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.ui.teacherEdit.TeacherEditProfile"
-            android:parentActivityName=".view.ui.profileTeacher.ProfileTeacher" />
+            android:parentActivityName=".view.ui.profileTeacher.ProfileTeacher"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.ui.teacherAppointment.TeacherAppointment"
-            android:parentActivityName=".view.ui.teacherHome.TeacherHome" />
+            android:parentActivityName=".view.ui.teacherHome.TeacherHome"
+            android:screenOrientation="portrait" />
         <activity android:name=".view.ui.teacherHome.TeacherHome" />
         <activity
             android:name=".view.ui.teacherList.TeacherList"
-            android:parentActivityName=".view.ui.studentHome.StudentHome" />
+            android:parentActivityName=".view.ui.studentHome.StudentHome"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.ui.studentEdit.StudentEditProfile"
-            android:parentActivityName=".view.ui.profileStudent.ProfileStudent" />
-        <activity android:name=".view.ui.studentHome.StudentHome" />
-        <activity android:name=".view.ui.teacherRegister.TeacherRegister" />
-        <activity android:name=".view.ui.studentRegister.StudentRegister" />
-        <activity android:name=".view.ui.register.RegisterActivity" />
-        <activity android:name=".view.ui.account.AccountActivity" />
+            android:parentActivityName=".view.ui.profileStudent.ProfileStudent"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ui.studentHome.StudentHome"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ui.teacherRegister.TeacherRegister"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ui.studentRegister.StudentRegister"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ui.register.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ui.account.AccountActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.ui.splash.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppLauncher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

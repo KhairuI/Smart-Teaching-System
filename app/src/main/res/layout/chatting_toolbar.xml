@@ -1,0 +1,48 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/my_toolbar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:padding="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/chattingToolbarId">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/chatting_icon_image"
+                    android:src="@drawable/profile"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp">
+
+                </de.hdodenhof.circleimageview.CircleImageView>
+
+                    <TextView
+                        android:text="MD. Khairul Islam"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="16dp"
+                        android:ellipsize="end"
+                       android:layout_toEndOf="@id/chatting_icon_image"
+                        android:maxLines="1"
+                        android:id="@+id/chatting_name"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</merge>

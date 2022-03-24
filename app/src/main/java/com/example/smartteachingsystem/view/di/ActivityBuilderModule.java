@@ -1,6 +1,8 @@
 package com.example.smartteachingsystem.view.di;
 
 import com.example.smartteachingsystem.view.di.account.AccountViewModelModule;
+import com.example.smartteachingsystem.view.di.chat.ChatModule;
+import com.example.smartteachingsystem.view.di.chat.ChatViewModelModule;
 import com.example.smartteachingsystem.view.di.login.LoginViewModelModule;
 import com.example.smartteachingsystem.view.di.profileStudent.ProfileStudentViewModelModule;
 import com.example.smartteachingsystem.view.di.profileTeacher.ProfileTeacherViewModelModule;
@@ -22,6 +24,10 @@ import com.example.smartteachingsystem.view.di.teacherHome.TeacherHomeViewModelM
 import com.example.smartteachingsystem.view.di.teacherNote.TeacherNoteModule;
 import com.example.smartteachingsystem.view.di.teacherNote.TeacherNoteViewModelModule;
 import com.example.smartteachingsystem.view.di.teacherRegister.TeacherRegViewModelModule;
+import com.example.smartteachingsystem.view.ui.chatHistory.StudentChatHistoryActivity;
+import com.example.smartteachingsystem.view.ui.chatHistory.TeacherChatHistoryActivity;
+import com.example.smartteachingsystem.view.ui.chatting.StudentChattingActivity;
+import com.example.smartteachingsystem.view.ui.chatting.TeacherChattingActivity;
 import com.example.smartteachingsystem.view.ui.profileStudent.ProfileStudent;
 import com.example.smartteachingsystem.view.ui.profileTeacher.ProfileTeacher;
 import com.example.smartteachingsystem.view.ui.splash.SplashActivity;
@@ -185,6 +191,42 @@ public abstract class ActivityBuilderModule {
             }
     )
     abstract TeacherNote contributeTeacherNote();
+
+    // Student Chatting  Activity
+    @ContributesAndroidInjector(
+            modules = {
+                    ChatViewModelModule.class,
+                    ChatModule.class
+            }
+    )
+    abstract StudentChattingActivity contributeChattingActivity();
+
+    //Teacher  Chatting  Activity
+    @ContributesAndroidInjector(
+            modules = {
+                    ChatViewModelModule.class,
+                    ChatModule.class
+            }
+    )
+    abstract TeacherChattingActivity contributeTeacherChattingActivity();
+
+    // Student Chat History  Activity
+    @ContributesAndroidInjector(
+            modules = {
+                    ChatViewModelModule.class,
+                    ChatModule.class
+            }
+    )
+    abstract StudentChatHistoryActivity contributeChatHistoryActivity();
+
+    // Teacher Chat History  Activity
+    @ContributesAndroidInjector(
+            modules = {
+                    ChatViewModelModule.class,
+                    ChatModule.class
+            }
+    )
+    abstract TeacherChatHistoryActivity contributeTeacherChatHistoryActivity();
 
 
 }

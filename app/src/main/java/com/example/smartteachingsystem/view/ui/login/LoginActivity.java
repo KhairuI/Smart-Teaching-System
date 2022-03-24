@@ -18,6 +18,7 @@ import com.example.smartteachingsystem.view.ui.register.RegisterActivity;
 import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
 import com.example.smartteachingsystem.view.utils.RxBindingHelper;
+import com.example.smartteachingsystem.view.utils.SharedPrefUtils;
 import com.example.smartteachingsystem.view.utils.StateResource;
 import com.example.smartteachingsystem.view.ui.account.AccountActivity;
 import com.example.smartteachingsystem.view.ui.studentHome.StudentHome;
@@ -42,6 +43,7 @@ public class LoginActivity extends DaggerAppCompatActivity implements View.OnCli
     private Button loginButton;
     private TextView loginTextView;
     private LoginViewModel loginViewModel;
+    private SharedPrefUtils prefUtils;
 
     //Rx variable
     Observable<Boolean> formObservable;
@@ -58,6 +60,7 @@ public class LoginActivity extends DaggerAppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        prefUtils= new SharedPrefUtils(this);
         findSection();
         formValidation();
         loginViewModel= new ViewModelProvider(getViewModelStore(),modelProviderFactory).get(LoginViewModel.class);
@@ -107,9 +110,11 @@ public class LoginActivity extends DaggerAppCompatActivity implements View.OnCli
                                 goToRegisterActivity();
                             }
                             else if(role.equals("student")){
+                                prefUtils.setRole("student");
                                 goToStudentActivity();
                             }
                             else if(role.equals("teacher")){
+                                prefUtils.setRole("teacher");
                                 goToTeacherActivity();
                             }
                             break;

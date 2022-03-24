@@ -16,4 +16,8 @@
     <color name="normal_small_blue">#C8DAE8</color>
     <color name="my_toolbar">#517da2</color>
     <color name="pending">#E32D1F</color>
+    <color name="chat_bg">#d1dce2</color>
+    <color name="chat_view_bg_1">#effedd</color>
+    <color name="chat_text_1">#57b344</color>
+    <color name="chat_text_2">#a7a7a7</color>
 </resources>

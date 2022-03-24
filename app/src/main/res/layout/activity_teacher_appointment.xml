@@ -40,6 +40,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/black"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     android:layout_marginBottom="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -54,8 +55,8 @@
                     <ImageView
                         android:id="@+id/teacherAppEmailId"
                         android:src="@drawable/ic_email"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp">
+                        android:layout_width="24dp"
+                        android:layout_height="24dp">
 
                     </ImageView>
                     <TextView
@@ -63,7 +64,7 @@
                         android:layout_gravity="center_vertical"
                         android:id="@+id/teacherAppointmentEmailId"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="khairul15-9838@diu.edu.bd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -79,8 +80,8 @@
 
                     <ImageView
                         android:src="@drawable/ic_department"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp">
+                        android:layout_width="24dp"
+                        android:layout_height="24dp">
 
                     </ImageView>
                     <TextView
@@ -88,7 +89,7 @@
                         android:layout_marginStart="5dp"
                         android:textColor="@color/black"
                         android:layout_gravity="center_vertical"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="CSE | Section: C"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -105,8 +106,8 @@
                     <ImageView
                         android:id="@+id/teacherAppCallId"
                         android:src="@drawable/ic_phone"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp">
+                        android:layout_width="24dp"
+                        android:layout_height="24dp">
 
                     </ImageView>
                     <TextView
@@ -114,7 +115,7 @@
                         android:id="@+id/teacherAppointmentMobileId"
                         android:layout_marginStart="5dp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="01515267153"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -135,8 +136,9 @@
                     android:textColor="@color/green"
                     android:id="@+id/reasonTitleId"
                     android:layout_marginTop="10dp"
+                    android:textStyle="bold"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:text="@string/reason"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -155,7 +157,7 @@
                         android:justificationMode="inter_word"
                         android:id="@+id/counselingReasonId"
                         android:layout_gravity="center_horizontal"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:text="@string/counseling_reason"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -169,7 +171,7 @@
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:text="@string/comments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -242,14 +244,7 @@
 
                 </LinearLayout>
 
-
-
             </LinearLayout>
-
-
-
-
-
         </RelativeLayout>
 
     </ScrollView>
@@ -258,9 +253,9 @@
 
        android:layout_centerHorizontal="true"
        android:id="@+id/teacherAppointmentProgressId"
-       android:layout_marginTop="180dp"
-       android:layout_width="60dp"
-       android:layout_height="60dp">
+       android:layout_centerInParent="true"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
 
    </ProgressBar>
 

@@ -39,8 +39,8 @@
 
                     <ImageView
                         android:src="@drawable/ic_initial"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp">
+                        android:layout_width="24dp"
+                        android:layout_height="24dp">
 
                     </ImageView>
                     <TextView
@@ -48,7 +48,7 @@
                         android:layout_gravity="center_vertical"
                         android:id="@+id/studentAppointmentInitialId"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="Tracher Initial: MR"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -65,8 +65,8 @@
                     <ImageView
                         android:id="@+id/studentAppEmailId"
                         android:src="@drawable/ic_email"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp">
+                        android:layout_width="24dp"
+                        android:layout_height="24dp">
 
                     </ImageView>
                     <TextView
@@ -74,7 +74,7 @@
                         android:layout_gravity="center_vertical"
                         android:id="@+id/studentAppointmentEmailId"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="headcse@diu.edu.bd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -90,8 +90,8 @@
 
                     <ImageView
                         android:src="@drawable/ic_department"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp">
+                        android:layout_width="24dp"
+                        android:layout_height="24dp">
 
                     </ImageView>
                     <TextView
@@ -99,7 +99,7 @@
                         android:layout_marginStart="5dp"
                         android:textColor="@color/black"
                         android:layout_gravity="center_vertical"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="Professor Dept. of CSE"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -116,8 +116,8 @@
                     <ImageView
                         android:id="@+id/studentAppPhoneId"
                         android:src="@drawable/ic_phone"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp">
+                        android:layout_width="24dp"
+                        android:layout_height="24dp">
 
                     </ImageView>
                     <TextView
@@ -125,7 +125,7 @@
                         android:id="@+id/studentAppointmentMobileId"
                         android:layout_marginStart="5dp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="01515267153"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -141,8 +141,8 @@
 
                     <ImageView
                         android:src="@drawable/ic_home"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp">
+                        android:layout_width="24dp"
+                        android:layout_height="24dp">
 
                     </ImageView>
                     <TextView
@@ -150,7 +150,7 @@
                         android:id="@+id/studentAppointmentOfficeId"
                         android:layout_marginStart="5dp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:text="CSE 201"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -170,7 +170,8 @@
                 <TextView
                     android:textColor="@color/green"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     android:text="@string/counseling_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -189,7 +190,7 @@
                         android:justificationMode="inter_word"
                         android:id="@+id/counselingScheduleId"
                         android:layout_gravity="center_horizontal"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:text="@string/counseling_schedule"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -203,7 +204,8 @@
                     android:layout_marginTop="10dp"
                     android:id="@+id/updateCounselingId"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     android:text="@string/topics"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -247,7 +249,7 @@
                     <Button
                         android:layout_margin="5dp"
                         android:id="@+id/studentAppointmentButtonId"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         android:textAllCaps="false"
                         android:text="@string/make_appointment"
@@ -268,10 +270,9 @@
 
             <ProgressBar
                 android:id="@+id/studentAppointmentProgressId"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="150dp"
-                android:layout_width="60dp"
-                android:layout_height="60dp">
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
             </ProgressBar>
 

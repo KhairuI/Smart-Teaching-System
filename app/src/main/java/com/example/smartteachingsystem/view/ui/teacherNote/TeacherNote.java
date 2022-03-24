@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,6 +27,7 @@ import com.example.smartteachingsystem.R;
 import com.example.smartteachingsystem.view.adapter.NoteAdapter;
 import com.example.smartteachingsystem.view.model.Note;
 import com.example.smartteachingsystem.view.model.StudentApp;
+import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHome;
 import com.example.smartteachingsystem.view.ui.teacherHome.TeacherHomeViewModel;
 import com.example.smartteachingsystem.view.utils.CheckInternet;
 import com.example.smartteachingsystem.view.utils.NoInternetDialogue;
@@ -101,7 +104,7 @@ public class TeacherNote extends DaggerAppCompatActivity implements View.OnClick
 
                             break;
                         case SUCCESS:
-                            showSnackBar("Update Successfully");
+                            showSnackBar("Save Successfully");
                             viewModel.getNotes();
 
                             break;
@@ -136,7 +139,6 @@ public class TeacherNote extends DaggerAppCompatActivity implements View.OnClick
     private void findSection() {
         Toolbar toolbar = findViewById(R.id.noteListToolbarId);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView= findViewById(R.id.noteListRecycleId);
         refreshLayout= findViewById(R.id.noteRefreshId);
@@ -147,6 +149,14 @@ public class TeacherNote extends DaggerAppCompatActivity implements View.OnClick
         FloatingActionButton add = findViewById(R.id.noteInsertId);
         add.setOnClickListener(this);
         progressBar= findViewById(R.id.noteProgressId);
+
+        ImageView back= findViewById(R.id.img_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TeacherNote.this, TeacherHome.class));
+            }
+        });
 
     }
 

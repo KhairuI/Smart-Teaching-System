@@ -135,7 +135,4 @@ public class AllTeacherAdapter extends RecyclerView.Adapter<AllTeacherAdapter.My
         this.listener= listener;
     }
 
-
-
-
 }

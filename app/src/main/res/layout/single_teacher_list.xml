@@ -6,12 +6,12 @@
 
     <RelativeLayout
         android:id="@+id/mainLayout"
-        android:padding="7dp"
+        android:padding="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:layout_margin="7dp"
+            android:layout_margin="8dp"
             android:id="@+id/topId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -19,16 +19,16 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/singleTeacherImageId"
                 android:src="@drawable/profile"
-                android:layout_width="45dp"
-                android:layout_height="45dp">
+                android:layout_width="48dp"
+                android:layout_height="48dp">
 
             </de.hdodenhof.circleimageview.CircleImageView>
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_margin="7dp"
-            android:layout_marginStart="10dp"
+            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/topId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -36,10 +36,16 @@
             <TextView
                 android:text="Akther Hossain"
                 android:id="@+id/singleTeacherNameId"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:ellipsize="end"
-                android:maxLines="1"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:freezesText="true"
+                android:clickable="true"
                 android:layout_alignParentStart="true"
                 android:layout_toStartOf="@id/singleTeacherInitialId"
                 android:textColor="@color/black"
@@ -52,7 +58,7 @@
                 android:text="SAH"
                 android:layout_marginStart="5dp"
                 android:id="@+id/singleTeacherInitialId"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:layout_alignParentEnd="true"
                 android:textColor="@color/black"
                 android:layout_width="wrap_content"
@@ -63,9 +69,15 @@
             <TextView
                 android:text="Lecturer Dept. of CSE"
                 android:id="@+id/singleTeacherDeptId"
-                android:textSize="16sp"
-                android:ellipsize="end"
-                android:maxLines="1"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:freezesText="true"
+                android:clickable="true"
                 android:layout_below="@id/singleTeacherNameId"
                 android:textColor="@color/black"
                 android:layout_width="wrap_content"
@@ -76,9 +88,15 @@
             <TextView
                 android:text="akther@diu.edu.bd"
                 android:id="@+id/singleTeacherEmailId"
-                android:textSize="16sp"
-                android:ellipsize="end"
-                android:maxLines="1"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:freezesText="true"
+                android:clickable="true"
                 android:layout_below="@id/singleTeacherDeptId"
                 android:textColor="@color/black"
                 android:layout_width="wrap_content"

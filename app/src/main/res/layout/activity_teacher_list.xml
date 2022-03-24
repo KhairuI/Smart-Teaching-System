@@ -46,8 +46,8 @@
     <ProgressBar
         android:id="@+id/allTeacherProgressId"
         android:layout_centerInParent="true"
-        android:layout_width="60dp"
-        android:layout_height="60dp">
+        android:layout_width="48dp"
+        android:layout_height="48dp">
 
     </ProgressBar>
 

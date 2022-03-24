@@ -24,7 +24,7 @@
                 <TextView
                     android:text="@string/login_here"
                     android:textColor="@color/black"
-                    android:textSize="23sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -98,7 +98,7 @@
                     <Button
                         android:text="@string/login"
                         android:enabled="false"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         android:id="@+id/loginButtonId"
                         android:textAllCaps="false"
@@ -133,8 +133,8 @@
         android:id="@+id/loginProgressId"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
-        android:layout_width="60dp"
-        android:layout_height="60dp">
+        android:layout_width="48dp"
+        android:layout_height="48dp">
 
     </ProgressBar>
 
