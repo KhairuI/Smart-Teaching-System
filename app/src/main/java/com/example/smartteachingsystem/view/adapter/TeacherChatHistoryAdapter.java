@@ -1,5 +1,6 @@
 package com.example.smartteachingsystem.view.adapter;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,7 @@ public class TeacherChatHistoryAdapter extends RecyclerView.Adapter<TeacherChatH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         TeacherChatUser chatUser = lists.get(position);
 
         Log.d("mymsg", "Chat history Adapter -> sender uId: "+chatUser.getReceiverUid());

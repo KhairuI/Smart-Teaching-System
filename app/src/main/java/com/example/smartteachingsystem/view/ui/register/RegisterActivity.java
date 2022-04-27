@@ -50,7 +50,7 @@ public class RegisterActivity extends DaggerAppCompatActivity {
     }
 
     private void findSection() {
-      //  student= findViewById(R.id.studentTextId);
+        student= findViewById(R.id.studentTextId);
         teacher= findViewById(R.id.teacherTextId);
     }
 }

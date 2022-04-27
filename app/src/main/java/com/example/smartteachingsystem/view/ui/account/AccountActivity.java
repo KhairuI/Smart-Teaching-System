@@ -144,7 +144,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements View.OnC
         accountPassword= findViewById(R.id.accountPasswordEditTextId);
         accountButton= findViewById(R.id.createAccountButtonId);
         accountButton.setOnClickListener(this);
-       // loginNowButton= findViewById(R.id.loginNowButtonId);
+        loginNowButton= findViewById(R.id.loginNowButtonId);
         loginNowButton.setOnClickListener(this);
         accountText= findViewById(R.id.accountToolbarTextId);
         accountText.setOnClickListener(this);
