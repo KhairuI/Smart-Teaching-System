@@ -6,8 +6,10 @@
         <entry key="..\:/Android Project/SmartTeachingSystem/app/src/main/res/layout/about_dialogue.xml" value="0.25" />
         <entry key="..\:/Android Project/SmartTeachingSystem/app/src/main/res/layout/activity_account.xml" value="0.13465952563121653" />
         <entry key="..\:/Android Project/SmartTeachingSystem/app/src/main/res/layout/activity_chat_history.xml" value="0.13465952563121653" />
+        <entry key="..\:/Android Project/SmartTeachingSystem/app/src/main/res/layout/activity_chatting.xml" value="0.25" />
         <entry key="..\:/Android Project/SmartTeachingSystem/app/src/main/res/layout/activity_register.xml" value="0.13465952563121653" />
         <entry key="..\:/Android Project/SmartTeachingSystem/app/src/main/res/layout/activity_teacher_chat_history.xml" value="0.13465952563121653" />
+        <entry key="..\:/Android Project/SmartTeachingSystem/app/src/main/res/layout/activity_teacher_chatting.xml" value="0.25" />
       </map>
     </option>
   </component>
